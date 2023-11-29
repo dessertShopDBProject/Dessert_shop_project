@@ -1,6 +1,7 @@
 <?php
 // 載入db.php來連結資料庫
 require_once 'db.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,56 +9,136 @@ require_once 'db.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>搜蒐甜點店</title>
-    <style>
-        .search-bar{
-            width:70%;
-            height:30px;
-            border-radius:10px;
-            background-color:lightgray;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="all.css">
 </head>
 <body>
-<form action="select.php" method="GET">
-    <div class="search">
-        <input type="text" class="search-bar" name="searchTerm" placeholder="輸入店名...">
-        <input type="submit" value="搜尋">
-    </div>
-</form>
-
-<div id="search-result">
-    <?php
-        $searchTerm=array();
-
-        // 獲取搜索條件
-        $searchTerm = isset($_GET['searchTerm']) ? $_GET['searchTerm'] : '';
-
-        // 查詢資料
-        $sql = "SELECT * FROM dessert_shop WHERE Shop_Name LIKE '%$searchTerm%'";
-        $result = $conn->query($sql);
-
-        // 顯示查詢結果
-        if ($result->num_rows > 0) {
-            echo "<table>";
-            echo "<tr><th>Name</th><th>Email</th><th>Seat</th><th>Phone</th><th>Website</th><th>Action</th></tr>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row['Shop_Name'] . "</td>";
-                echo "<td>" . $row['Shop_Email'] . "</td>";
-                echo "<td>" . $row['Shop_Seat'] . "</td>";
-                echo "<td>" . $row['Shop_Phone'] . "</td>";
-                echo "<td>" . $row['Shop_Website'] . "</td>";
-                echo "<td><a href='shop_info.php?shop_id=" . $row["Shop_ID"] . "'><button type='button'>詳細資訊</button></a></td>";
-                echo "</tr>";
+    <div class="wrap">
+        <div class="navbar">
+            <h1 class="logo"><a href="index.php">搜蒐甜點店</a></h1>
+            <ul class="nav">
+            <?php
+                    if (isset($_SESSION['nowUser'])) {
+                        // 使用者已登入，顯示收藏和圖鑑
+                        echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
+                        echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
+                        echo '<li class="nav-content"><a href="user_info.php?userid=' . $_SESSION['nowUser']['user_ID'] . '"><i class="fa-solid fa-user"></i></a></li>';
+                    } else {
+                        // 使用者未登入
+                        echo '<li class="nav-content hide"><a href="#">收藏</a></li>';
+                        echo '<li class="nav-content hide"><a href="#">圖鑑</a></li>';
+                        echo '<li class="nav-content"><a href="signup.php"><i class="fa-solid fa-user"></i></a></li>';
+                    }
+                ?>
+            </ul>
+        </div>
+        <div class="main">
+        <form action="select.php" method="GET">
+            <div class="search-section">
+                <input type="text" placeholder="請輸入店名關鍵字" name="keyword" class="search-bar">
+                <select class="zone-choice" name="zone-choice">
+                    <option value="all">全部</option>
+                    <option value="中壢區">中壢區</option>
+                    <option value="平鎮區">平鎮區</option>
+                    <option value="龍潭區">龍潭區</option>
+                    <option value="復興區">復興區</option>
+                    <option value="大溪區">大溪區</option>
+                    <option value="八德區">八德區</option>
+                    <option value="桃園區">桃園區</option>
+                    <option value="龜山區">龜山區</option>
+                    <option value="蘆竹區">蘆竹區</option>
+                    <option value="大園區">大園區</option>
+                    <option value="觀音區">觀音區</option>
+                    <option value="新屋區">新屋區</option>
+                    <option value="楊梅區">楊梅區</option>
+                </select>
+                <?php
+                if (isset($_SESSION['nowUser'])) {
+                    echo "<input type='checkbox' name='no-visited' id='no-visited'>
+                    <label for='no-visited'>不看去過的店家</label>";
+                }
+                ?>
+                <div>
+                    <input type="checkbox" name="four-star" id="four-star">
+                    <label for="four-star">4 星以上</label>
+                </div>
+                <input type="submit" value="搜尋" class="search-button">
+            </div>
+        </form>
+    <div id="search-result">
+        <?php
+            $searchTerm=array();
+            $keyword=$_GET['keyword'];
+            $zone = $_GET['zone-choice'];
+            $userID=$_SESSION['nowUser']['user_ID'];
+            $noVisited = isset($_GET['no-visited']) ? true : false;
+            $fourStar = isset($_GET['four-star']) ? true : false;
+            
+            $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address 
+            FROM shop 
+            LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID";
+            $sql .= " WHERE 1=1";  // To always have a valid condition to append
+            
+            if ($keyword !== null) {
+                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%')";
             }
-            echo "</table>";
-        } else {
-            echo "0 筆結果";
-        }
-        
-        // 關閉資料庫連接
-        $conn->close();
-    ?>
-</div>
+            if ($zone !== 'all') {
+                $sql .= " AND shop_Address LIKE '%$zone%'";
+            }
+            if ($noVisited) {
+                $sql .= " AND shop.shop_ID NOT IN (SELECT shop_ID FROM visited WHERE user_ID='$userID')";
+            }
+
+            if ($fourStar) {
+                $sql .= " AND shop.shop_ID IN (SELECT shop_ID FROM comment GROUP BY shop_ID HAVING AVG(com_Rating) >= 4)";
+            }
+
+            $result = $conn->query($sql);
+
+            // 顯示查詢結果
+            echo "<ul class='shop-list'>";
+            if ($result->num_rows > 0) {
+               
+            while ($row = $result->fetch_assoc()) {
+                $shopID=$row["shop_ID"];
+                $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
+                $result_rating=$conn->query($rating_sql);
+                
+                $shopName= $row["shop_Name"];
+                echo"
+                    <li>
+                    <img src='#' alt=$shopName>
+                    <div class='shop-list-content'>
+                        <div class='name-and-comment'>
+                            <h2>$shopName</h2>";
+                            if($result_rating->num_rows > 0) {
+                                $row_rating = $result_rating->fetch_assoc();
+                                echo "<p>" .round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i></p>";
+                            };
+                echo "
+                        </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere quod ipsa natus necessitatibus quae asperiores in at qui nihil repellat iusto sunt architecto delectus, sit deleniti, veritatis reprehenderit dolores accusantium?
+                        Possimus, quibusdam culpa assumenda aliquam vitae at enim sapiente provident reprehenderit, architecto optio quaerat rem temporibus fugiat recusandae tempore dolorem natus obcaecati molestias. Quas hic quaerat veniam porro aspernatur nesciunt!</p>
+                        <p><i class='fas fa-map-marker-alt' style='color: #fb1313;'></i>".$row['shop_Address']."</p>
+                        <p>
+                            <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項一 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項二 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i> 品項三
+                        </p>
+                        <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
+                    </div>
+                    </li>";
+                }
+            } else {
+                echo "<script>alert('没有找到匹配的结果'); window.location.href = 'index.php';</script>";
+                exit();
+            }
+            echo "</ul>";
+            
+            // 關閉資料庫連接
+            $conn->close();
+            ?>
+        </div>
+    </div>
 </body>
 </html>
