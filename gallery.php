@@ -53,11 +53,14 @@
                                 // Shop is visited
                                 echo "
                                     <li class='gallery-shop-detail visited'>
-                                        <div class='cover'>
-                                            <img src='https://wowlavie-aws.hmgcdn.com/file/article_all/A1545983513.jpg'>
-                                        </div>
-                                        <p>".$row['shop_Name']."</p>
-                                        <p>".$row['shop_Address']."</p>
+                                            <a href='shop_info.php?shop_id=".$row['visited']."'>
+                                                <div class='cover'>
+                                                    <img src='https://wowlavie-aws.hmgcdn.com/file/article_all/A1545983513.jpg'>
+                                                </div>
+                                            </a>
+                                            <p>".$row['shop_Name']."</p>
+                                            <p>".$row['shop_Address']."</p>
+                                        
                                     </li>";
                             } else {
                                 // Shop is not visited
