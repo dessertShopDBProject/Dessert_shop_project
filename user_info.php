@@ -1,5 +1,6 @@
 <?php
         require_once('db.php'); // 引入資料庫連線
+
         session_start();
 ?>
 <!DOCTYPE html>
@@ -42,21 +43,52 @@
         // 存在 NowUser 的 session，取出相應的用戶資訊
             $nowUser = $_SESSION["nowUser"];
             $showUser = $nowUser['user_ID'];
-            $nickname = $nowUser['user_NickName'];
-            $email = $nowUser['user_Email'];
-            $pwd=$nowUser['user_Password'];
+            // $nickname = $nowUser['user_NickName'];
+            // $email = $nowUser['user_Email'];
+            // $pwd=$nowUser['user_Password'];
 
+            //從資料庫選取NickName 
+            $nickNameQuery = "SELECT user_NickName FROM user WHERE user_ID = '$showUser'";
+            $nickNameResult = $conn->query($nickNameQuery);
+            $nickName = $nickNameResult->fetch_assoc();
+            $nickName = $nickName["user_NickName"];
+
+
+            $emailQuery = "SELECT user_Email FROM user WHERE user_ID = '$showUser'";
+            $emailResult = $conn->query($emailQuery);
+            $email = $emailResult->fetch_assoc();
+            $email = $email["user_Email"];
+
+            $passwordQuery = "SELECT user_Password FROM user WHERE user_ID = '$showUser'";
+            $passwordResult = $conn->query($passwordQuery);
+            $password = $passwordResult->fetch_assoc();
+            $password = $password["user_Password"];
+
+            // 從資料庫中選擇圖片
+            $sql = "SELECT user_Photo FROM user WHERE user_ID = '$showUser'";
+            $result = $conn->query($sql);
+            // 檢查查詢是否成功
+            if ($result->num_rows > 0) {
+
+                // 將 blob 資料轉換成圖片顯示
+                $row = $result->fetch_assoc();
+        
+                $userPhoto =  $row['user_Photo'];
+
+
+            }
             echo"
             <div class='main-user-info'>
                 <div class='setting'>
-                    <img src='#' alt='user photo'>
-                    <p><a href='#'>修改資料</a></p>
+                <img src='data:image/png;base64," . base64_encode($userPhoto) . "' alt='user_photo' style='width: 350px; height: 400px;' />
+                
+                    <p><a href='adjust_uinfo.php'>修改資料</a></p>
                     <p><a href='logout.php'>登出</a></p>
                 </div>
                 <div class='info'>
-                    <p>名稱(暱稱):".$nickname."</p>
+                    <p>名稱(暱稱):".$nickName."</p>
                     <p>電子郵件:".$email."</p>
-                    <p>密碼:".$pwd."</p>
+                    <p>密碼:".$password."</p>
                     <div class='link'>";
                     echo "
                         <a href='favorite.php?userid=$showUser' class='favorite'>
