@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    session_start();
+    //session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,16 +67,17 @@
                 <input type="submit" value="搜尋" class="search-button">
             </div>
             <ul class="style-choice">
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
+                <?php //更改處
+                    $sql = "
+                    SELECT *
+                    FROM type";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                            // Shop is visited
+                            echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?keyword=".$row['type_Nam']."'".$row['type_ID']."' name='dess-type' id='dess-type' >".$row['type_Nam']."</a></li>";
+                        }}
+                ?>
             </ul>
             </form>
             <h2 class="title">最多人收藏的店</h2>
@@ -110,7 +111,21 @@
             </div>
         </div>
         <div class="footer">
-            
+            <div class="left-footer"><img src='../image/logo-2.jfif'></div>
+            <div class="center-footer">
+                <h3>搜蒐甜點店</h3>    
+                <ul>
+                    <li><a href="index.php">首頁</a></li>
+                    <li><a href="index.php">首頁</a></li>
+                    <li><a href="index.php">首頁</a></li>
+                    <li><a href="index.php">首頁</a></li>
+                    <li><a href="index.php">首頁</a></li>
+                    <li><a href="index.php">首頁</a></li>
+                </ul>
+            </div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

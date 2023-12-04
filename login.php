@@ -28,13 +28,14 @@
                 <label for="pwd">密碼 </label>
                 <input type="password" id="pwd" placeholder="請輸入密碼" name="pwd">
             </div>
-            <input type="submit" value="登入" class="signup-button">
+            <input type="submit" value="登入" class="login-button">
+            <a href="signup.php">沒有帳號?</a>
         </form>
 
 <?php
 
     require_once('db.php'); // 引入資料庫連線
-    session_start(); // 啟動 session
+    //session_start(); // 啟動 session
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];

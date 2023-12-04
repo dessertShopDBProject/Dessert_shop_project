@@ -1,6 +1,6 @@
 <?php
 require_once 'db.php';
-session_start();
+//session_start();
 
 // 檢查是否有 POST 數據
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

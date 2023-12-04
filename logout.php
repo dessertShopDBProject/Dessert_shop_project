@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session
+//session_start(); // Start the session
 
 // Check if the user is logged in
 if (isset($_SESSION['nowUser'])) {
@@ -11,6 +11,6 @@ if (isset($_SESSION['nowUser'])) {
 }
 
 // Redirect to the login page
-header("Location: login.php");
+header("Location: index.php");
 exit();
 ?>

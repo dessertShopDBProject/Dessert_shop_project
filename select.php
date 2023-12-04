@@ -1,7 +1,7 @@
 <?php
 // 載入db.php來連結資料庫
 require_once 'db.php';
-session_start();
+//session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,19 +70,22 @@ session_start();
     <div id="search-result">
         <?php
             $searchTerm=array();
-            $keyword=$_GET['keyword'];
-            $zone = $_GET['zone-choice'];
-            $userID=$_SESSION['nowUser']['user_ID'];
+            $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+            $zone = isset($_GET['zone-choice']) ? $_GET['zone-choice'] :'';
+            if (isset($_SESSION['nowUser']['user_ID'])) {
+                $userID = $_SESSION['nowUser']['user_ID'];
+            }
             $noVisited = isset($_GET['no-visited']) ? true : false;
             $fourStar = isset($_GET['four-star']) ? true : false;
             
             $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address 
             FROM shop 
-            LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID";
+            LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID
+            LEFT JOIN type ON dessert.type_ID=type.type_ID";
             $sql .= " WHERE 1=1";  // To always have a valid condition to append
             
             if ($keyword !== null) {
-                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%')";
+                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%' OR type_Nam LIKE '%$keyword%')";
             }
             if ($zone !== 'all') {
                 $sql .= " AND shop_Address LIKE '%$zone%'";
