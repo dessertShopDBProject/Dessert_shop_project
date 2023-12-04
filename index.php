@@ -67,6 +67,18 @@
                 <input type="submit" value="搜尋" class="search-button">
             </div>
             <ul class="style-choice">
+                <?php //更改處
+                    $sql = "
+                    SELECT *
+                    FROM type";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                            // Shop is visited
+                            echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?keyword=&dess-type='".$row['type_ID']."' name='dess-type' id='dess-type' >".$row['type_Name']."</a></li>";
+                        }}
+                ?>
+                <!-- <li class="style"><a href="#">風格一</a></li>
                 <li class="style"><a href="#">風格一</a></li>
                 <li class="style"><a href="#">風格一</a></li>
                 <li class="style"><a href="#">風格一</a></li>
@@ -75,8 +87,7 @@
                 <li class="style"><a href="#">風格一</a></li>
                 <li class="style"><a href="#">風格一</a></li>
                 <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
-                <li class="style"><a href="#">風格一</a></li>
+                <li class="style"><a href="#">風格一</a></li> -->
             </ul>
             </form>
             <h2 class="title">最多人收藏的店</h2>

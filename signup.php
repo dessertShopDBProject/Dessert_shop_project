@@ -71,7 +71,7 @@
                 }
             }
             else{
-                echo "<script>alert('帳號已註冊');</script>";
+                echo "<script>alert('帳號已註冊');window.location.href='login.php'</script>";
                 exit();
             }
         }
