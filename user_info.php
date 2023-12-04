@@ -62,7 +62,7 @@
             $passwordResult = $conn->query($passwordQuery);
             $password = $passwordResult->fetch_assoc();
             $password = $password["user_Password"];
-
+            $maskedPassword = str_repeat('*', strlen($password));
             // 從資料庫中選擇圖片
             /*
             $sql = "SELECT user_Photo FROM user WHERE user_ID = '$showUser'";
@@ -88,7 +88,7 @@
                 <div class='info'>
                     <p>名稱(暱稱):".$nickName."</p>
                     <p>電子郵件:".$email."</p>
-                    <p>密碼:".$password."</p>
+                    <p>密碼:".$maskedPassword."</p>
                     <div class='link'>";
                     echo "
                         <a href='favorite.php?userid=$showUser' class='favorite'>
