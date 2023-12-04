@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    session_start();
+    //session_start();
 ?>
 <?php
 $userid=$_SESSION['nowUser']['user_ID'];

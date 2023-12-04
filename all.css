@@ -79,6 +79,11 @@ table {
     display: block;
     padding:20px;
 }
+.nav-content a{
+    text-decoration: none;
+    display: block;
+    color:#5B2B1E;
+}
 .hide{
     display: none;
 }
@@ -104,7 +109,8 @@ img{
 .search-bar{
     width:60%;
     height:30px;
-    border:1px solid lightgray;
+    border:1px solid gray;
+    background-color: transparent;
 }
 .zone-choice{
     width:10%;
@@ -126,11 +132,13 @@ img{
     margin-top: 30px;
     display: flex;
     flex-wrap:wrap;
+    align-items: flex-start; 
+    width: fit-content;
     background-color: #F2D5DB;
     border-radius: 5px;
 }
 .style{
-    width:20%;
+    width:200px;
 }
 .style a{
     text-decoration: none;
@@ -198,6 +206,29 @@ img{
     color:#594347;
     text-decoration: none;
     display: block;
+}
+/*footer*/
+.footer{
+    background-color: #D9B8C1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top:50px;
+    padding:50px;
+}
+.center-footer h3{
+    font-weight: bold;
+}
+.center-footer li{
+    margin-top:10px;
+}
+.center-footer li a{
+    text-decoration: none;
+    display: block;
+}
+.left-footer img{
+    width:100px;
+    height:40px;
 }
 /*shop detail*/
 .shop-detail-main{
@@ -324,13 +355,16 @@ img{
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    display: flex;
     justify-content: center;
     align-items: center;
 } 
 
 /* 彈出的評論表單視窗 */
 .comment-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -339,13 +373,9 @@ img{
     max-width: 500px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
-.comment-form button {
+.comment-form .comment-form-close {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -361,16 +391,25 @@ img{
     margin-top:20px;
     resize:none;
 }
-.comment-submit{
+.validation-message{
+    display: none;
+}
+.comment-submit,.comment-delete{
     background-color: #F591B3;
     color:white;
     border-radius: 3px;
     border: none;
     padding:10px;
     margin-top:20px;
+    cursor: pointer;
 }
-.comment-submit:hover{
+
+.comment-submit:hover,.comment-delete:hover{
     background-color: #F60099;
+}
+.revise-button{
+    display: flex;
+    justify-content: space-between;
 }
 .comment-user{
     margin-bottom: 50px;
@@ -518,6 +557,9 @@ img{
     font-size: x-large;
     margin-bottom:30px;
 }
+.favorite-search-bar{
+    display: block;
+}
 .favorite-search-button{
     padding:8px 25px;
     background-color: #F2A7AD;
@@ -534,6 +576,7 @@ img{
     padding:10px;
 }
 .favorite-main{
+    width:80%;
     border:1px lightgray solid;
     border-radius: 10px;
     padding:20px;
@@ -598,13 +641,13 @@ img{
     font-weight: bold;
     margin-bottom: 20px;
 }
-.signup a{
+.signup a,.login a{
     margin-top:10px;
     font-size: smaller;
     text-decoration: none;
     color:#5B2B1E;
 }
-.signup a:hover{
+.signup a:hover,.login a:hover{
     color:#F60099;
     cursor: pointer;
 }
@@ -612,7 +655,7 @@ img{
     display: block;
     margin-bottom: 30px;
 }
-.signup-column input,.login input{
+.signup-column input,.login-column input{
     padding:5px;
 }
 .signup-column input:focus,.login-column input:focus{
@@ -628,5 +671,46 @@ img{
 .signup-button:hover,.login-button:hover{
     background-color: #FF7FBF;
     color:#F2F2F0;
+    cursor: pointer;
+}
+/*adjust user info*/
+.adjust-user-main{
+    width:60%;
+    margin:0 auto;
+    margin-top:50px;
+    border:1px lightpink solid;
+    border-radius: 1px;
+    padding:10px;
+}
+.adjust-user-main form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: start;
+    margin-top:30px;
+}
+.adjust-user-main label{
+    color:#594347;
+    font-size: small;
+}
+.adjust-user-main input{
+    margin-bottom: 30px;
+    margin-top:10px;
+    padding:10px 0px;
+    width: 60%;
+}
+.adjust-user-main h2{
+    font-size: larger;
+    color: #5B2B1E;
+    font-weight: bold;
+}
+.user-update{
+    background-color: #F2A7AD;
+    color:#F2F2F0;
+    padding: 10px 20px;
+    border:none;
+}
+.user-update:hover{
+    background-color: #F591B3;
     cursor: pointer;
 }

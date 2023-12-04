@@ -1,25 +1,6 @@
 
-$(document).ready(function() {
-    $(".favorite-link").click(function(){
-      var shopID = $(this).data('shopid');
-      var isFavorited = localStorage.getItem('favorited-' + shopID) === 'true';
-      isFavorited = !isFavorited;
-      localStorage.setItem('favorited-' + shopID, isFavorited);
-      updateFavoriteButton(shopID, isFavorited);
-    });
-
-    function updateFavoriteButton(isFavorited) {
-      // 根據收藏狀態更新按鈕的外觀
-      var heartIcon = $(".favorite-link i");
-      heartIcon.toggleClass("fa-solid", isFavorited);
-      heartIcon.toggleClass("fa-regular", !isFavorited);
-    }
-    $(".collect-link").click(function(){
-      $(".collect-link i").toggleClass("fa fa-plus fa-solid fa-check");
-    });
-});
 function openCommentForm() {
-  document.getElementById('commentFormOverlay').style.display = 'block';
+  document.getElementById('commentFormOverlay').style.display = 'flex';
 }
 
 function closeCommentForm() {
@@ -27,50 +8,21 @@ function closeCommentForm() {
 }
 
 function editCommentForm(){
-  document.getElementById('commentEditFormOverlay').style.display = 'block';
+  document.getElementById('commentEditFormOverlay').style.display = 'flex';
 }
 
 function closeEditCommentForm() {
   document.getElementById('commentEditFormOverlay').style.display = 'none';
 }
-
-/*
-//添加編輯評論評分樣式
-// 在页面加载时设置初始的评分图标样式
-document.addEventListener('DOMContentLoaded', function() {
-    var selectedRating = document.getElementById('selectedRating').value;
-    setRating(selectedRating);
+document.querySelector('.comment-submit').addEventListener('click', function (event) {
+  // Check if a rating is selected
+  if (document.getElementById('selectedRating').value === '') {
+      document.querySelector('.validation-message').style.display = 'block';
+      event.preventDefault(); // Prevent form submission
+  } else {
+      document.querySelector('.validation-message').style.display = 'none';
+  }
 });
-
-// 更新评分值和图标样式
-function setRating(rating) {
-    // 设置隐藏字段的值
-    document.getElementById('selectedRating').value = rating;
-
-    // 移除所有评分图标的活动样式
-    var ratingNumbers = document.querySelectorAll('.rating-number');
-    ratingNumbers.forEach(function(number) {
-        number.classList.remove('active');
-    });
-
-    // 添加活动样式到指定的评分图标
-    var selectedNumber = document.querySelector('.rating-number[data-rating="' + rating + '"]');
-    if (selectedNumber) {
-        selectedNumber.classList.add('active');
-    }
-}
-
-// 处理用户点击评分图标事件
-document.addEventListener('DOMContentLoaded', function() {
-    var ratingNumbers = document.querySelectorAll('.rating-number');
-    ratingNumbers.forEach(function(number) {
-        number.addEventListener('click', function() {
-            setRating(number.getAttribute('data-rating'));
-        });
-    });
-});
-*/
-
 
 var ratingNumbers = document.querySelectorAll('.rating-number');
 ratingNumbers.forEach(function (ratingNumber) {
@@ -96,7 +48,6 @@ function setEditRating(rating) {
   const ratingIcon = document.querySelector(`.rating-number[onclick="setEditRating(${rating})"]`);
   const selectedRatingInput = document.querySelector(`input[name="selected_edit_rating"]`);
   selectedRatingInput.value = rating;
-  console.log(rating);
 }
 
 function submitForm(){
@@ -110,3 +61,8 @@ function toggleHeart() {
   }
 }
 
+function deletionAlert(){
+  if(confirm("確定刪除評論嗎")==true){
+    document.querySelector(".Editoverlay form").submit();
+  }
+}
