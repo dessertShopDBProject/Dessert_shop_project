@@ -142,19 +142,18 @@
                 else
                 {
                     echo "<div class='comment-nav'>
-                    <p class='avg'>暫無評論</p>
-                        <div class='write-comment'>
-                            <i class='fa-solid fa-pen'></i>";
-                            if($result_commentornot->num_rows > 0) {
-                                $row_comment_edit=$result_commentornot->fetch_assoc();
-                                echo "<input type='submit' name='edit-comment-button' class='edit-comment-button' value='修改評論' onclick='editCommentForm()'>";
-                            }
-                            else
-                            {
-                                echo "<input type='submit' name='write-comment-button' class='write-comment-button' value='撰寫評論' onclick='openCommentForm()'>";
+                    <p class='avg'>暫無評論</p>";
+                            if (isset($_SESSION['nowUser'])) {
+                                if($result_commentornot->num_rows > 0) {
+                                    $row_comment_edit=$result_commentornot->fetch_assoc();
+                                    echo "<div class='write-comment'><i class='fa-solid fa-pen'></i><input type='submit' name='edit-comment-button' class='edit-comment-button' value='修改評論' onclick='editCommentForm()'> </div>";
+                                }
+                                else
+                                {
+                                    echo "<div class='write-comment'><i class='fa-solid fa-pen'></i><input type='submit' name='write-comment-button' class='write-comment-button' value='撰寫評論' onclick='openCommentForm()'> </div>";
+                                }
                             }
                     echo "
-                        </div>
                     </div>";
                 }
             }
@@ -176,7 +175,7 @@
                         </ul>
                         <input type="hidden" id="selectedRating" name="selected_rating" value="" required>
                         <span class="validation-message">請選擇評分</span>
-                        <textarea class='textarea-content' placeholder='請輸入你的想法...' name="comment-content" required></textarea>
+                        <textarea class='textarea-content' placeholder='請輸入你的想法...' name="comment-content"></textarea>
                         <input type="submit" value="提交評論" class='comment-submit'>
                     </form>
                     <button class='comment-form-close' onclick='closeCommentForm()'>&times;</button>
@@ -207,7 +206,7 @@
                         <textarea class='textarea-content' name="comment-content"><?php echo $row_comment_edit["com_Content"];?></textarea>
                         <div class="revise-button">
                             <input type="submit" value="更新評論" class='comment-submit' name='comment-update'>
-                            <button class="comment-delete" name="comment-delete" onclick="deletionAlert()">
+                            <button class="comment-delete" name="comment-delete">
                                 <i class="fa-solid fa-trash-can"></i>刪除評論
                             </button>
                         </div>
@@ -265,7 +264,8 @@
             </div>
         </div>
     </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="swiper.js"></script>
     <script src="all.js"></script>
 </body>
 </html>

@@ -54,15 +54,12 @@ function submitForm(){
   document.querySelector(".comment-search form").submit();
 }
 
+$(".favorite-shop-content form").submit(function() {
+  if (confirm("確定取消收藏嗎")) return true;
+  else return false;       
+});
 
-function toggleHeart() {
-  if (confirm("確定取消收藏嗎") == true) {
-    document.querySelector(".favorite-shop-content form").submit();
-  }
-}
-
-function deletionAlert(){
-  if(confirm("確定刪除評論嗎")==true){
-    document.querySelector(".Editoverlay form").submit();
-  }
-}
+$(".Editoverlay form").submit(function() {
+  if (confirm("確定刪除評論嗎")) return true;
+  else return false;       
+});
