@@ -62,3 +62,9 @@ function deletionAlert(shopID){
     window.location.href = "shop_info.php?shop_id=" + shopID;
   }
 }
+
+function deletionFavorite(shopID){
+  if (confirm("確定要取消收藏嗎？")) {
+    window.location.href = "deleteFavorite.php?id=" + shopID;
+  }
+}
