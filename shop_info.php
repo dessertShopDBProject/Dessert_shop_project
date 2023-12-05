@@ -184,7 +184,6 @@
             <!-- 彈出的評論表單模態視窗(修改) -->
             <div id="commentEditFormOverlay" class="Editoverlay">
                 <div class="comment-form">
-                    <p class='comment-user'></p>
                     <form action="update_comment.php" method="POST">
                         <input type="hidden" name="shop_id" value="<?php echo $row['shop_ID']; ?>">
                         <?php echo "
@@ -206,11 +205,12 @@
                         <textarea class='textarea-content' name="comment-content"><?php echo $row_comment_edit["com_Content"];?></textarea>
                         <div class="revise-button">
                             <input type="submit" value="更新評論" class='comment-submit' name='comment-update'>
-                            <button class="comment-delete" name="comment-delete">
+                            <button class="comment-delete" name="comment-delete" type="button" onclick="deletionAlert('<?php echo $row['shop_ID']; ?>')">
                                 <i class="fa-solid fa-trash-can"></i>刪除評論
                             </button>
                         </div>
                     </form>
+                    
                     <button class='comment-form-close' onclick='closeEditCommentForm()'>&times;</button>
                 </div>
             </div>

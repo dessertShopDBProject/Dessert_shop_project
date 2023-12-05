@@ -54,12 +54,11 @@ function submitForm(){
   document.querySelector(".comment-search form").submit();
 }
 
-$(".favorite-shop-content form").submit(function() {
-  if (confirm("確定取消收藏嗎")) return true;
-  else return false;       
-});
 
-$(".Editoverlay form").submit(function() {
-  if (confirm("確定刪除評論嗎")) return true;
-  else return false;       
-});
+function deletionAlert(shopID){
+  if (confirm("確定要刪除評論嗎？")) {
+    window.location.href = "delete_comment.php?shop_id=" + shopID;
+  } else {
+    window.location.href = "shop_info.php?shop_id=" + shopID;
+  }
+}

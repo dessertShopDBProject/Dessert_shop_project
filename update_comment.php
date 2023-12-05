@@ -17,15 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Error updating comment: ";
             }
         }
-        else if(isset($_POST["comment-delete"])) {
-            $deleteSql = "DELETE FROM comment WHERE shop_ID = '$shopID' AND user_ID='$userID'";
-            if ($conn->query($deleteSql) === TRUE) {
-                header("Location: shop_info.php?shop_id=" . $shopID);
-                exit;
-            } else {
-                echo "Error deleting comment: ";
-            }
-        }
     // 關閉數據庫連接
     $conn->close();
 }
