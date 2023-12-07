@@ -10,10 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $shopID = $_POST['shop_id'];
 
     if ($comment_keyword != null) {
-        $sql = "SELECT * FROM comment WHERE shop_ID='$shopID' AND com_Content LIKE '%$comment_keyword%'";
+        $sql = "SELECT comment.*,user.* FROM comment,user WHERE shop_ID='$shopID' AND com_Content LIKE '%$comment_keyword%' AND comment.user_ID=user.user_ID";
     }
     else{
-        $sql = "SELECT * FROM comment WHERE shop_ID='$shopID'";  
+        $sql = "SELECT comment.*,user.* FROM comment,user WHERE shop_ID='$shopID' AND comment.user_ID=user.user_ID";  
     }
     if($comment_rating_choice!="全部")
     {
@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
     while ($row_comment = $result->fetch_assoc()) {
         $searchResultHTML .= "<li class='comment'>
             <div class='comment-user'>
-                <p>user</p>
+                <p>".$row_comment['user_NickName']."</p>
                 <p>" . $row_comment['com_Rating'] . "</p>
             </div>
                 <p>" . $row_comment['com_Content'] . "</p>
