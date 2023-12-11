@@ -1,4 +1,19 @@
 
+$(document).ready(function(){
+  $("#zone-choice").click(function(){
+    $(".style-choice-dropdown").removeClass("style-choice-dropdown-active");
+    $(".zone-choice-dropdown").toggleClass("zone-choice-dropdown-active");
+  });
+  $("#style-choice").click(function(){
+    $(".zone-choice-dropdown").removeClass("zone-choice-dropdown-active");
+    $(".style-choice-dropdown").toggleClass("style-choice-dropdown-active");
+  });
+  $(".dessert_tab li").click(function(){
+    $(this).toggleClass("active");
+  })
+  
+});
+
 function openCommentForm() {
   document.getElementById('commentFormOverlay').style.display = 'flex';
 }
@@ -68,3 +83,4 @@ function deletionFavorite(shopID){
     window.location.href = "deleteFavorite.php?id=" + shopID;
   }
 }
+

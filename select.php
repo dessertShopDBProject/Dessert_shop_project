@@ -36,8 +36,8 @@ require_once 'db.php';
         </div>
         <div class="main">
         <form action="select.php" method="GET">
-            <div class="search-section">
-                <input type="text" placeholder="請輸入店名關鍵字" name="keyword" class="search-bar">
+            <div class="select-search-section">
+                <input type="text" placeholder="請輸入店名關鍵字" name="keyword" class="select-search-bar">
                 <select class="zone-choice" name="zone-choice">
                     <option value="all">全部</option>
                     <option value="中壢區">中壢區</option>
@@ -53,6 +53,19 @@ require_once 'db.php';
                     <option value="觀音區">觀音區</option>
                     <option value="新屋區">新屋區</option>
                     <option value="楊梅區">楊梅區</option>
+                </select>
+                <select class="style-choice" name="style-choice">
+                    <option value='#' disabled>甜點種類</option>
+                <?php //更改處
+                    $sql = "
+                    SELECT *
+                    FROM desstype";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                            echo "<option value='".$row['desstype_Name']."'>".$row['desstype_Name']."</option>";
+                        }}
+                ?>
                 </select>
                 <?php
                 if (isset($_SESSION['nowUser'])) {
@@ -81,11 +94,11 @@ require_once 'db.php';
             $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address 
             FROM shop 
             LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID
-            LEFT JOIN type ON dessert.type_ID=type.type_ID";
+            LEFT JOIN desstype ON dessert.desstype_ID=desstype.desstype_ID";
             $sql .= " WHERE 1=1";  // To always have a valid condition to append
             
             if ($keyword !== null) {
-                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%' OR type_Nam LIKE '%$keyword%')";
+                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%' OR desstype_Name LIKE '%$keyword%')";
             }
             if ($zone !== 'all') {
                 $sql .= " AND shop_Address LIKE '%$zone%'";
