@@ -9,7 +9,11 @@ $(document).ready(function(){
     $(".style-choice-dropdown").toggleClass("style-choice-dropdown-active");
   });
   $(".dessert_tab li").click(function(){
-    $(this).toggleClass("active");
+    $(this).siblings().removeClass("dessert_tab_active");
+    $(this).addClass("dessert_tab_active");
+    var selectedType = $(this).data('type');
+    $("#selectedType").val(selectedType);
+    $("#typeForm").submit();
   })
   
 });
@@ -66,7 +70,7 @@ function setEditRating(rating) {
 }
 
 function submitForm(){
-  document.querySelector(".comment-search form").submit();
+  document.querySelector(".comment-search>form").submit();
 }
 
 

@@ -22,7 +22,7 @@
                 <form action="select.php" method="GET" class="search-section">
                 <input type="button" name="zone-choice" id="zone-choice" value="選擇地區">
                     <ul class="zone-choice-dropdown" name="zone-choice">
-                        <li><a href="#">地區一</a></li>
+                        <li>中壢區</li>
                         <li><a href="">地區一</a></li>
                         <li><a href="">地區一</a></li>
                     </ul>
@@ -101,18 +101,7 @@
                 </div>
         </div>
         <div class="footer">
-            <div class="left-footer"><img src='../image/logo-2.jfif'></div>
-            <div class="center-footer">
-                <h3>搜蒐甜點店</h3>    
-                <ul>
-                    <li><a href="index.php">首頁</a></li>
-                    <li><a href="index.php">首頁</a></li>
-                    <li><a href="index.php">首頁</a></li>
-                    <li><a href="index.php">首頁</a></li>
-                    <li><a href="index.php">首頁</a></li>
-                    <li><a href="index.php">首頁</a></li>
-                </ul>
-            </div>
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
             <div class="right-footer">
                 <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
             </div>

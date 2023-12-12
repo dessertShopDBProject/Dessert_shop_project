@@ -37,7 +37,7 @@ require_once 'db.php';
         <div class="main">
         <form action="select.php" method="GET">
             <div class="select-search-section">
-                <input type="text" placeholder="請輸入店名關鍵字" name="keyword" class="select-search-bar">
+                <input type="text" placeholder="請輸入店名或甜點關鍵字" name="keyword" class="select-search-bar">
                 <select class="zone-choice" name="zone-choice">
                     <option value="all">全部</option>
                     <option value="中壢區">中壢區</option>
@@ -91,7 +91,7 @@ require_once 'db.php';
             $noVisited = isset($_GET['no-visited']) ? true : false;
             $fourStar = isset($_GET['four-star']) ? true : false;
             
-            $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address 
+            $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address,shop_Phone 
             FROM shop 
             LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID
             LEFT JOIN desstype ON dessert.desstype_ID=desstype.desstype_ID";
@@ -135,12 +135,20 @@ require_once 'db.php';
                             };
                 echo "
                         </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere quod ipsa natus necessitatibus quae asperiores in at qui nihil repellat iusto sunt architecto delectus, sit deleniti, veritatis reprehenderit dolores accusantium?
-                        Possimus, quibusdam culpa assumenda aliquam vitae at enim sapiente provident reprehenderit, architecto optio quaerat rem temporibus fugiat recusandae tempore dolorem natus obcaecati molestias. Quas hic quaerat veniam porro aspernatur nesciunt!</p>
+                        <p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>
                         <p><i class='fas fa-map-marker-alt' style='color: #fb1313;'></i>".$row['shop_Address']."</p>
-                        <p>
-                            <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項一 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項二 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i> 品項三
-                        </p>
+                        <p>";
+                        $tagSql="SELECT COUNT(desstype_Name) AS SumofType,desstype_Name FROM dessert,desstype,shop
+                        WHERE dessert.desstype_ID=desstype.desstype_ID  AND shop.shop_ID=dessert.shop_ID AND shop.shop_ID='$shopID'
+                        GROUP BY desstype_Name ORDER BY SumofType DESC LIMIT 3";
+                        $result_tag=$conn->query($tagSql);
+                        if($result_tag->num_rows>0){
+                            while($row_tag = $result_tag->fetch_assoc()){
+                                echo  "<i class='fa-solid fa-tags' style='color: #FF9B8F;margin:5px;'></i>".$row_tag['desstype_Name']."";
+                            }
+                            
+                        }    
+                        echo "</p>
                         <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
                     </div>
                     </li>";

@@ -50,16 +50,56 @@
                 echo "
                 <div class='left-content'>
                     <div class='simple-intro'>
-                        <img src='../image/dessert.jpg' alt='店面照片'>
-                        <ul class='shop-info'>
-                            <li class='address'>地址:".$row['shop_Address']."</li>
-                            <li class='phone'>電話:".$row['shop_Phone']."</li>
-                            <li class='website'>網頁:".$row['shop_Website']."</li>
-                            <li class='email'>Email:".$row['shop_Email']."</li>
-                        </ul>
-                    </div>
-                    <div class='shop-name'>
-                        <p>" . $row['shop_Name'] . "</p>
+                        <div class='shop-image'>
+                            <img src='../image/dessert.jpg' alt='店面照片'>
+                            <p class='shop-name'>" . $row['shop_Name'] . "</p>
+                        </div> 
+                        <div class='introduce'>
+                            <h2>店家資訊</h2>
+                            <ul class='shop-info'>
+                                <li class='address'><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>".$row['shop_Address']."</li>
+                                <li class='phone'><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</li>
+                                <li>";
+                                if ($row["shop_ForHere"] == 1) 
+                                {
+                                echo "<li><i class='fa-solid fa-note-sticky' style=' margin-right:5px;'></i>可內用</li>";
+                                }
+                                echo "</li>
+                                <li><ul class='shop-contact'>";
+                                    if ($row["shop_Email"] != "") 
+                                    {
+                                    echo "<li class='email'><a href='mailto:".$row['shop_Email']."'><i class='fa-solid fa-envelope' style='color: #021211; margin-right:5px;'></i></a></li>";
+                                    }
+                                    if ($row["shop_FB"] != "") 
+                                    {
+                                    echo "<li><a href='".$row['shop_FB']."'><i class='fab fa-facebook-square' style='color: #3f76d5;margin-right:5px;'></i></a></li>";
+                                    }
+                                    if ($row["shop_IG"] != "") 
+                                    {
+                                    echo "<li><a href='".$row['shop_IG']."'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:5px;></i></a></li>";
+                                    }
+                                echo "</ul></li>";
+                                echo "<li>
+                                    <table class='opening-time'>
+                                        <tr>
+                                            <th colspan='2'>營業時間</th>
+                                        </tr>
+                                        <tr>
+                                            <td>星期一</td>
+                                            <td>9:00 - 18:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>星期一</td>
+                                            <td>9:00 - 18:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>星期一</td>
+                                            <td>9:00 - 18:00</td>
+                                        </tr>
+                                    </table>
+                                </li>";
+                            echo "</ul>
+                        </div>
                     </div>
                     <ul class='add'>";
                     if (isset($_SESSION['nowUser']['user_ID'])) {
@@ -88,35 +128,55 @@
                     }
                     echo "
                     </ul>
-                    <div class='introduce'>
-                        <h2>簡介</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere illo quisquam vel laborum distinctio voluptates expedita, quam maxime in nihil, possimus libero quibusdam similique reiciendis. Corporis ex nihil tenetur excepturi.
-                            Voluptatem doloremque harum voluptates minus numquam exercitationem repellat corrupti expedita? Velit suscipit, voluptate, vel aperiam harum officiis, rerum praesentium aliquid illum repellat quas nostrum quod distinctio! Ipsum fuga voluptatum atque!</p>
-                    </div>
                     <h2 class='dessert-title'>品項</h2> ";
-
-                $dessert_sql = "SELECT * FROM dessert WHERE shop_ID = '$shopID'";
-                $result_dessert = $conn->query($dessert_sql);
-                if ($result_dessert->num_rows > 0) {
-                    echo "<ul class='dessert-list'>";
-                    while ($row_dessert = $result_dessert->fetch_assoc()) {
-                        echo "
+                    
+                    $type_sql="SELECT DISTINCT dessert.desstype_ID, desstype_Name FROM dessert, desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID='$shopID'";
+                    $result_type=$conn->query($type_sql);
+                    echo "<form id='typeForm' method='POST' action='search-type.php'>";?>
+                    <input type='hidden' name='shop_id' value='<?php echo $row['shop_ID']; ?>'>
+                    <input type='hidden' id='selectedType' name='selectedType' value=''>
+                    <ul class='dessert_tab'>
+                    <?php
+                        if ($result_type->num_rows > 0) {
+                            while ($row_type = $result_type->fetch_assoc()) {
+                                echo "<li data-type='" . $row_type['desstype_Name'] . "'>" . $row_type['desstype_Name'] . "</li>";
+                            }
+                        }
+                    echo "</ul>
+                </form>";
+                    if (isset($_SESSION['searchTypeResultHTML'])) {
+                        echo $_SESSION['searchTypeResultHTML'];
+                        // 清除 SESSION 中的搜尋結果，以避免重複顯示
+                        unset($_SESSION['searchTypeResultHTML']);
+                    } 
+                    else{
+                        $dessert_sql = "SELECT * FROM dessert,desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID = '$shopID'";
+                        $dessert_result = $conn->query($dessert_sql);
+                        if ($dessert_result->num_rows > 0) {
+                            echo "<ul class='dessert-list' id='dessert-list'>";
+                            while ($dessert_row = $dessert_result->fetch_assoc()) {
+                                echo "<li class='dessert'>
+                                    <img src='../image/dessert.jpg' alt=''>
+                                    <h3>" . $dessert_row['dess_Name'] . "</h3>
+                                    <p>$" . $dessert_row['dess_Price'] . "</p>
+                                </li>";
+                                }
+                               echo "</ul>";
+                            } 
+                        else {
+                            echo "
                             <li class='dessert'>
-                                <img src='../image/dessert.jpg' alt=''>
-                                <h3>" . $row_dessert['dess_Name'] . "</h3>
-                                <p>$" . $row_dessert['dess_Price'] . "</p>
-                            </li>";
+                                <p>暫無任何品項</p>
+                            </li>";    
+                        }
+                        echo "</ul>";
                     }
-                    echo "</ul>";
-                } else {
-                    echo "暫無任何品項";
-                }
                 echo "</div>
                 <div class='right-content'>";
                 if (isset($_SESSION['nowUser'])) {
                     $userID=$_SESSION['nowUser']['user_ID'];
                     $commentornot_sql="SELECT shop_ID,user_ID,com_Content,com_Rating FROM comment WHERE shop_ID='$shopID' AND user_ID='$userID'";
-                    $editComment_sql = "UPDATE comment SET com_Content = 'TINA',com_Rating= WHERE shop_ID = $shopID AND user_ID=$userID";
+                    //$editComment_sql = "UPDATE comment SET com_Content = 'TINA',com_Rating= WHERE shop_ID = $shopID AND user_ID=$userID";
                     $result_commentornot=$conn->query($commentornot_sql);
                 }
                 $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
@@ -218,7 +278,7 @@
                 <div class="comment-search">
                     <form action="search_comment.php" method="POST">
                         <input type="hidden" name="shop_id" value="<?php echo $row['shop_ID']; ?>">
-                        <input type="text" placeholder="請輸入查詢評論關鍵字" name="comment-keyword" class="search-bar comment-search-bar">
+                        <input type="text" placeholder="請輸入查詢評論關鍵字" name="comment-keyword" class="comment-search-bar">
                         <select class="comment-rating-choice" name="comment-rating-choice">
                             <option value="全部">全部</option>    
                             <option value="5">5 星</option>
