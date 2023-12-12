@@ -80,7 +80,7 @@ require_once 'db.php';
                 <input type="submit" value="搜尋" class="search-button">
             </div>
         </form>
-    <div id="search-result">
+        <div id="search-result">
         <?php
             $searchTerm=array();
             $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
@@ -162,6 +162,13 @@ require_once 'db.php';
             // 關閉資料庫連接
             $conn->close();
             ?>
+        </div>
+        </div>
+        <div class="footer">
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+            </div>
         </div>
     </div>
 </body>

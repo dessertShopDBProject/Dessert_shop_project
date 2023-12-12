@@ -35,7 +35,7 @@
                 
             </ul>
         </div>
-    </div>
+    
     <?php
         // 檢查是否有 NowUser 的 session，並確認是否有登入資訊
         if (isset($_SESSION["nowUser"]) && !empty($_SESSION["nowUser"])) {
@@ -103,6 +103,11 @@
             </div>";
         }
     ?>
-
+    <div class="footer">
+        <div class="left-footer"><img src='../image/logo-4.png'></div>
+        <div class="right-footer">
+            <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+        </div>
+    </div>
 </body>
 </html>

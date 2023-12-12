@@ -165,7 +165,7 @@
                             } 
                         else {
                             echo "
-                            <li class='dessert'>
+                            <li class='no-dessert'>
                                 <p>暫無任何品項</p>
                             </li>";    
                         }
@@ -321,6 +321,12 @@
                 // 關閉數據庫連接
                 $conn->close();
             ?>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
             </div>
         </div>
     </div>

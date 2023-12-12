@@ -41,7 +41,7 @@
             <?php 
                     $userID = $_SESSION['nowUser']['user_ID'];
                     $sql = "
-                        SELECT shop.*, visited.shop_ID AS visited
+                        SELECT shop.*, visited.shop_ID AS visited,shop.shop_ID AS shopID
                         FROM shop
                         LEFT JOIN visited ON shop.shop_ID = visited.shop_ID AND visited.user_ID = '$userID'
                     ";
@@ -66,7 +66,9 @@
                                 // Shop is not visited
                                 echo "
                                     <li class='gallery-shop-detail'>
-                                        <img src='https://wowlavie-aws.hmgcdn.com/file/article_all/A1545983513.jpg'>
+                                        <a href='shop_info.php?shop_id=".$row['shopID']."'>
+                                            <img src='https://wowlavie-aws.hmgcdn.com/file/article_all/A1545983513.jpg'>
+                                        </a>
                                         <p>".$row['shop_Name']."</p>
                                         <p>".$row['shop_Address']."</p>
                                     </li>";
@@ -75,6 +77,12 @@
                     }
                 ?>
             </ul>
+        </div>
+        <div class="footer">
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+            </div>
         </div>
     </div>
 </body>
