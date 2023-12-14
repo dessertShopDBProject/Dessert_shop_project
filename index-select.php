@@ -8,7 +8,8 @@
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
     $noVisited = isset($_GET['no-visited']) ? true : false;
     $fourStar = isset($_GET['four-star']) ? true : false;
-
+    unset($_SESSION['indexSearchResultHTML']);
+    $sql="";
     if (isset($_SESSION['nowUser']['user_ID'])) {
         $userID = $_SESSION['nowUser']['user_ID'];
     }
@@ -79,11 +80,11 @@
             }
         } else {
             $indexSearchResultHTML.= "<script>alert('没有找到匹配的结果'); window.location.href = 'index.php';</script>";
-            exit();
         }
         $indexSearchResultHTML.= "</ul>";
         $_SESSION['indexSearchResultHTML'] = $indexSearchResultHTML;
 
         header("Location: select.php");
-        exit;
+
+        #exit;
 ?>

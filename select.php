@@ -84,7 +84,6 @@ require_once 'db.php';
         <?php
             if (isset($_SESSION['indexSearchResultHTML'])) {
                 echo $_SESSION['indexSearchResultHTML'];
-                // 清除 SESSION 中的搜尋結果，以避免重複顯示
                 unset($_SESSION['indexSearchResultHTML']);
             }
             else{
