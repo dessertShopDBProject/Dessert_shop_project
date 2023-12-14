@@ -86,5 +86,5 @@
 
         header("Location: select.php");
 
-        #exit;
+        exit;
 ?>

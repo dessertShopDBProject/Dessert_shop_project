@@ -101,6 +101,12 @@
             </div>
         </div>
     </div>
+    <div class="footer">
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+            </div>
+        </div>
     <script src="all.js"></script>
 </body>
 </html>

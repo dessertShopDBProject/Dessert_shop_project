@@ -36,7 +36,7 @@
                 
             </ul>
         </div>
-    
+    </div>
     <?php
         // 檢查是否有 NowUser 的 session，並確認是否有登入資訊
         if (isset($_SESSION["nowUser"]) && !empty($_SESSION["nowUser"])) {
