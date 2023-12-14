@@ -39,6 +39,6 @@ $conn->close();
 $_SESSION['searchTypeResultHTML'] = $searchTypeResultHTML;
 
 // 重定向回 shop_info.php
-header("Location: shop_info.php?shop_id=" . $shopID."#dessert-list");
+header("Location: shop_info.php?shop_id=" . $shopID."#dessert-title");
 exit;
 ?>

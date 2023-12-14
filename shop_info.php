@@ -68,15 +68,19 @@
                                 <li><ul class='shop-contact'>";
                                     if ($row["shop_Email"] != "") 
                                     {
-                                    echo "<li class='email'><a href='mailto:".$row['shop_Email']."'><i class='fa-solid fa-envelope' style='color: #021211; margin-right:5px;'></i></a></li>";
+                                    echo "<li class='email'><a href='mailto:".$row['shop_Email']."'><i class='fa-solid fa-envelope' style='color: #021211; margin-right:10px;'></i></a></li>";
                                     }
                                     if ($row["shop_FB"] != "") 
                                     {
-                                    echo "<li><a href='".$row['shop_FB']."'><i class='fab fa-facebook-square' style='color: #3f76d5;margin-right:5px;'></i></a></li>";
+                                    echo "<li><a href='".$row['shop_FB']."'><i class='fab fa-facebook-square' style='color: #3f76d5;margin-right:10px;'></i></a></li>";
                                     }
                                     if ($row["shop_IG"] != "") 
                                     {
-                                    echo "<li><a href='".$row['shop_IG']."'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:5px;></i></a></li>";
+                                    echo "<li><a href='".$row['shop_IG']."'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:10px;></i></a></li>";
+                                    }
+                                    if ($row["shop_Website"] != "") 
+                                    {
+                                    echo "<li><a href='".$row['shop_Website']."'><i class='fa-solid fa-globe' style='margin-right:10px;'></i></a></li>";
                                     }
                                 echo "</ul></li>";
                                 echo "<li>
@@ -128,9 +132,9 @@
                     }
                     echo "
                     </ul>
-                    <h2 class='dessert-title'>品項</h2> ";
+                    <h2 class='dessert-title' id='dessert-title'>品項</h2> ";
                     
-                    $type_sql="SELECT DISTINCT dessert.desstype_ID, desstype_Name FROM dessert, desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID='$shopID'";
+                    $type_sql="SELECT DISTINCT dessert.desstype_ID, desstype_Name FROM dessert, desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID='$shopID' ORDER BY dessert.desstype_ID DESC";
                     $result_type=$conn->query($type_sql);
                     echo "<form id='typeForm' method='POST' action='search-type.php'>";?>
                     <input type='hidden' name='shop_id' value='<?php echo $row['shop_ID']; ?>'>

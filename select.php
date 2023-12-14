@@ -84,7 +84,7 @@ require_once 'db.php';
         <?php
             if (isset($_SESSION['indexSearchResultHTML'])) {
                 echo $_SESSION['indexSearchResultHTML'];
-                unset($_SESSION['indexSearchResultHTML']);
+                #unset($_SESSION['indexSearchResultHTML']);
             }
             else{
             $searchTerm=array();
