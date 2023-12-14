@@ -41,10 +41,12 @@
                 <div class="search-choice">
                     <?php
                     if (isset($_SESSION['nowUser'])) {
-                        echo "<a href='index-select.php?no-visited=yes' id='no-visited'>不看去過的店家</button></a>";
+                        echo "<input type='checkbox' name='no-visited' id='no-visited-input' >
+                        <label for='no-visited-input' id='no-visited-label'>不看去過的店家</label>";
                     }
                     ?>
-                    <a href="index-select.php?four-star=yes" id='four-star'>四星以上</a>
+                    <input type='checkbox' name='four-star' id='four-star-input'>
+                    <label for='four-star-input' id='four-star-label'>四星以上</label>
                     <input type="submit" value="搜尋" class="search-button">
                 </div>
                 </form>

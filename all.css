@@ -96,7 +96,7 @@ body{
 .nav{
     display: flex;
     justify-content: flex-end;
-    width:30%;
+    width:20%;
 }
 .nav a{
     display: block;
@@ -199,12 +199,23 @@ img{
 .zone-choice-dropdown-active,.style-choice-dropdown-active{
     display: flex;
 }
-#four-star,#no-visited{
-    text-decoration: none;
-    background-color: lightgray;
-    margin-right: 10px;
+
+#no-visited-input,#four-star-input{
+    display: none;
+}
+#no-visited-label,#four-star-label{
+    background:lightcyan;
+    padding:10px;
     color:#5B2B1E;
-    padding:5px;
+    margin-right:10px;
+    border:none;
+    border-radius:5px;
+}
+#no-visited-label{
+    width:120px;
+}
+#four-star-label{
+    width:70px;
 }
 .search-button{
     border:0px;

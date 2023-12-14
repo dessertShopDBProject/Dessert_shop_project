@@ -6,18 +6,20 @@
     $zone = isset($_GET['zone']) ? $_GET['zone'] :'';
     $type=isset($_GET['type']) ? $_GET['type'] :'';
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-    $noVisited = isset($_GET['no-visited']) ? $_GET['no-visited'] :'';
-    $fourStar = isset($_GET['four-star']) ? $_GET['four-star'] :'';
+    $noVisited = isset($_GET['no-visited']) ? true : false;
+    $fourStar = isset($_GET['four-star']) ? true : false;
 
     if (isset($_SESSION['nowUser']['user_ID'])) {
         $userID = $_SESSION['nowUser']['user_ID'];
     }
 
-    if ($zone != "") {
-        $sql = "SELECT * FROM shop WHERE shop_Address LIKE '%$zone%'";
-    }
-    if($type!=""){
-        $sql = "SELECT DISTINCT shop.shop_ID,shop.* FROM shop,desstype,dessert WHERE dessert.shop_ID=shop.shop_ID AND dessert.desstype_ID=desstype.desstype_ID AND desstype_Name='$type'"; 
+    if($zone!=""|| $type!=""){
+        if ($zone != "") {
+            $sql = "SELECT * FROM shop WHERE shop_Address LIKE '%$zone%'";
+        }
+        if($type!=""){
+            $sql = "SELECT DISTINCT shop.shop_ID,shop.* FROM shop,desstype,dessert WHERE dessert.shop_ID=shop.shop_ID AND dessert.desstype_ID=desstype.desstype_ID AND desstype_Name='$type'"; 
+        }
     }
     else{
         $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address,shop_Phone 
@@ -29,11 +31,11 @@
         if ($keyword !== null) {
             $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%')";
         }
-        if ($noVisited=="yes") {
+        if ($noVisited) {
             $sql .= " AND shop.shop_ID NOT IN (SELECT shop_ID FROM visited WHERE user_ID='$userID')";
         }
 
-        if ($fourStar=="yes") {
+        if ($fourStar) {
             $sql .= " AND shop.shop_ID IN (SELECT shop_ID FROM comment GROUP BY shop_ID HAVING AVG(com_Rating) >= 4)";
         }
     }
@@ -41,7 +43,6 @@
     $indexSearchResultHTML.= "<ul class='shop-list'>";
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo $row;
             $shopID=$row["shop_ID"];
             $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
             $result_rating=$conn->query($rating_sql);
@@ -83,6 +84,6 @@
         $indexSearchResultHTML.= "</ul>";
         $_SESSION['indexSearchResultHTML'] = $indexSearchResultHTML;
 
-        #header("Location: select.php");
-        #exit;
+        header("Location: select.php");
+        exit;
 ?>

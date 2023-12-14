@@ -10,6 +10,16 @@ $(document).ready(function(){
     $(".style-choice-dropdown").toggleClass("style-choice-dropdown-active");
   });
 
+  $("#no-visited-input").click(function(){
+    $("#no-visited-label").css("background-color","gray");
+    $("#no-visited-label").css("color","white");
+  })
+
+  $("#four-star-input").click(function(){
+    $("#four-star-label").css("background-color","gray");
+    $("#four-star-label").css("color","white");
+  })
+
   $(".dessert_tab li").click(function(){
     $(this).siblings().removeClass("dessert_tab_active");
     $(this).addClass("dessert_tab_active");
