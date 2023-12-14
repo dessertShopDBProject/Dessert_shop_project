@@ -49,7 +49,7 @@ else {
 $conn->close();
 
 // 將搜尋結果保存在 SESSION 中，以便在 shop_info.php 中使用
-session_start();
+//session_start();
 $_SESSION['searchResultHTML'] = $searchResultHTML;
 
 // 重定向回 shop_info.php

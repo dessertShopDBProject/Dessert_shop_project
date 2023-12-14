@@ -19,14 +19,13 @@
         <div class="banner">   
             <div class="navbar-index">
                 <h1 class="logo"><a href="index.php">搜蒐甜點店</a></h1>
-                <form action="select.php" method="GET" class="search-section">
-                <input type="button" name="zone-choice" id="zone-choice" value="選擇地區">
-                    <ul class="zone-choice-dropdown" name="zone-choice">
-                        <li>中壢區</li>
-                        <li><a href="">地區一</a></li>
-                        <li><a href="">地區一</a></li>
+                <form action="index-select.php" method="GET" class="search-section">
+                    <input type="button" name="zone-choice" id="index-zone-choice" value="選擇地區">
+                    <ul class="zone-choice-dropdown">
+                        <li><a href="index-select.php?zone=中壢區">中壢區</a></li>
+                        <li><a href="index-select.php?zone=桃園區">桃園區</a></li>
                     </ul>
-                    <input type="button" name="style-choice" id="style-choice" value="選擇種類">
+                    <input type="button" name="style-choice" id="index-style-choice" value="選擇種類">
                     <ul class="style-choice-dropdown">
                         <?php //更改處
                             $sql = "SELECT * FROM desstype";
@@ -34,7 +33,7 @@
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()){
                                         // Shop is visited
-                                        echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?keyword=".$row['desstype_Name']."'".$row['desstype_ID']."' name='dess-type' id='dess-type' >".$row['desstype_Name']."</a></li>";
+                                        echo "<li class='style' name='dess-type' id='dess-type'><a href='index-select.php?type=".$row['desstype_Name']."' id='dess-type' >".$row['desstype_Name']."</a></li>";
                                     }}
                         ?>
                     </ul>
@@ -42,10 +41,10 @@
                 <div class="search-choice">
                     <?php
                     if (isset($_SESSION['nowUser'])) {
-                        echo "<input type='button' name='no-visited' id='no-visited' value='不看去過的店家'>";
+                        echo "<a href='index-select.php?no-visited=yes' id='no-visited'>不看去過的店家</button></a>";
                     }
                     ?>
-                    <input type="button" name="four-star" id="four-star" value="四星以上">
+                    <a href="index-select.php?four-star=yes" id='four-star'>四星以上</a>
                     <input type="submit" value="搜尋" class="search-button">
                 </div>
                 </form>

@@ -51,6 +51,7 @@ body{
     height: 100%;
 }
 .wrap{
+    height: 100%;
     width:100%;
     min-height: 100%;
     margin:0 auto;
@@ -60,7 +61,7 @@ body{
     background-image: url("../image/banner.png");
     background-size: cover;
     background-position: center;
-    height:600px;
+    height:100vh;
 
 }
 .navbar-index,.navbar{
@@ -162,12 +163,17 @@ img{
 .navbar-index{
     position:relative;
 }
-#zone-choice,#style-choice{
+.zone-choice,.style-choice{
+    padding:5px;
+    background:white;
+    border:1px solid lightgray;
+}
+#index-zone-choice,#index-style-choice{
     color:#5B2B1E;
     background-color: transparent;
     border: none;
 }
-#zone-choice:hover,#style-choice:hover{
+#index-zone-choice:hover,#index-style-choice:hover{
     cursor: pointer;
 }
 .zone-choice-dropdown, .style-choice-dropdown{
@@ -193,7 +199,13 @@ img{
 .zone-choice-dropdown-active,.style-choice-dropdown-active{
     display: flex;
 }
-
+#four-star,#no-visited{
+    text-decoration: none;
+    background-color: lightgray;
+    margin-right: 10px;
+    color:#5B2B1E;
+    padding:5px;
+}
 .search-button{
     border:0px;
     background-color: #F591B3;

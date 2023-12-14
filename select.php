@@ -55,7 +55,7 @@ require_once 'db.php';
                     <option value="楊梅區">楊梅區</option>
                 </select>
                 <select class="style-choice" name="style-choice">
-                    <option value='#' disabled>甜點種類</option>
+                    <option value='all'>全部</option>
                 <?php //更改處
                     $sql = "
                     SELECT *
@@ -82,9 +82,16 @@ require_once 'db.php';
         </form>
         <div id="search-result">
         <?php
+            if (isset($_SESSION['indexSearchResultHTML'])) {
+                echo $_SESSION['indexSearchResultHTML'];
+                // 清除 SESSION 中的搜尋結果，以避免重複顯示
+                unset($_SESSION['indexSearchResultHTML']);
+            }
+            else{
             $searchTerm=array();
             $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
             $zone = isset($_GET['zone-choice']) ? $_GET['zone-choice'] :'';
+            $style= isset($_GET['style-choice']) ? $_GET['style-choice'] :'';
             if (isset($_SESSION['nowUser']['user_ID'])) {
                 $userID = $_SESSION['nowUser']['user_ID'];
             }
@@ -103,6 +110,9 @@ require_once 'db.php';
             if ($zone !== 'all') {
                 $sql .= " AND shop_Address LIKE '%$zone%'";
             }
+            if ($style !== "all") {
+                $sql .= " AND desstype_Name='$style'";
+            }
             if ($noVisited) {
                 $sql .= " AND shop.shop_ID NOT IN (SELECT shop_ID FROM visited WHERE user_ID='$userID')";
             }
@@ -112,11 +122,10 @@ require_once 'db.php';
             }
 
             $result = $conn->query($sql);
-
+            
             // 顯示查詢結果
             echo "<ul class='shop-list'>";
             if ($result->num_rows > 0) {
-               
             while ($row = $result->fetch_assoc()) {
                 $shopID=$row["shop_ID"];
                 $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
@@ -154,11 +163,11 @@ require_once 'db.php';
                     </li>";
                 }
             } else {
-                echo "<script>alert('没有找到匹配的结果'); window.location.href = 'index.php';</script>";
+                echo "<script>alert('没有找到匹配的结果'); window.location.href = 'select.php';</script>";
                 exit();
             }
             echo "</ul>";
-            
+        }
             // 關閉資料庫連接
             $conn->close();
             ?>

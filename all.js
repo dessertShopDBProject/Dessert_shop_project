@@ -1,13 +1,15 @@
 
 $(document).ready(function(){
-  $("#zone-choice").click(function(){
+  $("#index-zone-choice").click(function(){
     $(".style-choice-dropdown").removeClass("style-choice-dropdown-active");
     $(".zone-choice-dropdown").toggleClass("zone-choice-dropdown-active");
   });
-  $("#style-choice").click(function(){
+
+  $("#index-style-choice").click(function(){
     $(".zone-choice-dropdown").removeClass("zone-choice-dropdown-active");
     $(".style-choice-dropdown").toggleClass("style-choice-dropdown-active");
   });
+
   $(".dessert_tab li").click(function(){
     $(this).siblings().removeClass("dessert_tab_active");
     $(this).addClass("dessert_tab_active");
@@ -95,4 +97,12 @@ function deletionUser(userID){
   } else {
     window.location.href = "user_info.php?user_id=" + userID;
   }
+}
+
+function setIndexZone(){
+  var selected_zone=document.querySelectorAll('.zone-choice-dropdown>li')
+  var indexSelectedZone=document.getElementById(indexSelectedZone);
+  indexSelectedZone.value=selected_zone;
+  console.log(indexSelectedZone);
+  
 }
