@@ -47,9 +47,14 @@ table {
 	border-spacing: 0;
 }
 /*CSS Reset end*/
+body{
+    height: 100%;
+}
 .wrap{
     width:100%;
+    min-height: 100%;
     margin:0 auto;
+    margin-bottom: -50px;
 }
 .banner{
     background-image: url("../image/banner.png");
@@ -322,6 +327,7 @@ img{
     align-items: center;
     margin-top:50px;
     padding:50px;
+    height:80px;
 }
 .center-footer h3{
     font-weight: bold;
@@ -385,17 +391,18 @@ img{
     padding: 0;
 }
 
-.dessert {
+.dessert,.no-dessert {
     width: 30%;
     margin-bottom: 20px;
     text-align: left;
-    background-color: #F2D9D0;
     border-radius: 10px;
     list-style-type:none;
     margin-right:20px;
     /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
 }
-
+.dessert{
+    background-color: #F2D9D0;
+}
 .dessert img {
     width: 100%;
     height: auto;

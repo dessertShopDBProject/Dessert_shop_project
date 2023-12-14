@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="all.js"></script>
     <link rel="stylesheet" href="all.css">
     
 </head>
@@ -83,6 +84,7 @@
                 /*<img src='data:image/png;base64," . base64_encode($userPhoto) . "' alt='user_photo' style='width: 350px; height: 400px;' />*/
             echo "
                     <p><a href='adjust_uinfo.php'>修改資料</a></p>
+                    <p><button type='submit' onclick=\"deletionUser('$showUser')\">刪除帳號</button></p>
                     <p><a href='logout.php'>登出</a></p>
                 </div>
                 <div class='info'>

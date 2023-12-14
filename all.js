@@ -88,3 +88,11 @@ function deletionFavorite(shopID){
   }
 }
 
+function deletionUser(userID){
+  console.log('hi');
+  if (confirm("確定要刪除帳號嗎？")) {
+    window.location.href = "delete_userinfo.php?user_id=" + userID;
+  } else {
+    window.location.href = "user_info.php?user_id=" + userID;
+  }
+}
