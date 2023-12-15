@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost
--- 產生時間： 2023-12-15 00:04:13
+-- 產生時間： 2023-12-15 10:26:47
 -- 伺服器版本： 8.0.35
 -- PHP 版本： 8.2.12
 
@@ -212,6 +212,94 @@ INSERT INTO `favorite` (`shop_ID`, `user_ID`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `opentime`
+--
+
+CREATE TABLE `opentime` (
+  `shop_ID` varchar(15) NOT NULL,
+  `shop_OpenWeek` varchar(100) NOT NULL,
+  `shop_OpenTime` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `opentime`
+--
+
+INSERT INTO `opentime` (`shop_ID`, `shop_OpenWeek`, `shop_OpenTime`) VALUES
+('s_01', '星期一', '未營業'),
+('s_01', '星期三', '下午2:30 - 下午10:00'),
+('s_01', '星期二', '下午2:30 - 下午10:00'),
+('s_01', '星期五', '下午2:30 - 下午10:00'),
+('s_01', '星期六', '下午2:30 - 下午10:00'),
+('s_01', '星期四', '下午2:30 - 下午10:00'),
+('s_01', '星期日', '下午2:30 - 下午10:00'),
+('s_02', '星期一', '下午12:00 - 下午8:00'),
+('s_02', '星期三', '下午12:00 - 下午8:00'),
+('s_02', '星期二', '下午12:00 - 下午8:00'),
+('s_02', '星期五', '下午12:00 - 下午8:00'),
+('s_02', '星期六', '下午12:00 - 下午8:00'),
+('s_02', '星期四', '下午12:00 - 下午8:00'),
+('s_02', '星期日', '下午12:00 - 下午8:00'),
+('s_03', '星期一', '下午1:00 - 下午9:00'),
+('s_03', '星期三', '下午1:00 - 下午9:00'),
+('s_03', '星期二', '下午1:00 - 下午9:00'),
+('s_03', '星期五', '下午1:00 - 下午9:00'),
+('s_03', '星期六', '下午1:00 - 下午9:00'),
+('s_03', '星期四', '下午1:00 - 下午9:00'),
+('s_03', '星期日', '下午1:00 - 下午9:00'),
+('s_04', '星期一', '上午11:00 - 下午8:00'),
+('s_04', '星期三', '上午11:00 - 下午8:00'),
+('s_04', '星期二', '上午11:00 - 下午8:00'),
+('s_04', '星期五', '上午11:00 - 下午8:00'),
+('s_04', '星期六', '上午11:00 - 下午8:00'),
+('s_04', '星期四', '上午11:00 - 下午8:00'),
+('s_04', '星期日', '上午11:00 - 下午8:00'),
+('s_05', '星期一', '上午11:00 - 下午10:00'),
+('s_05', '星期三', '上午11:00 - 下午10:00'),
+('s_05', '星期二', '上午11:00 - 下午10:00'),
+('s_05', '星期五', '上午11:00 - 下午10:00'),
+('s_05', '星期六', '上午11:00 - 下午10:00'),
+('s_05', '星期四', '上午11:00 - 下午10:00'),
+('s_05', '星期日', '上午11:00 - 下午10:00'),
+('s_06', '星期一', '上午11:00 - 下午10:00'),
+('s_06', '星期三', '上午11:00 - 下午10:00'),
+('s_06', '星期二', '上午11:00 - 下午10:00'),
+('s_06', '星期五', '上午11:00 - 下午10:00'),
+('s_06', '星期六', '上午11:00 - 下午10:00'),
+('s_06', '星期四', '上午11:00 - 下午10:00'),
+('s_06', '星期日', '上午11:00 - 下午10:00'),
+('s_07', '星期一', '下午12:00 - 下午6:00'),
+('s_07', '星期三', '下午12:00 - 下午6:00'),
+('s_07', '星期二', '休息'),
+('s_07', '星期五', '下午12:00 - 下午6:00'),
+('s_07', '星期六', '下午12:00 - 下午6:00'),
+('s_07', '星期四', '下午12:00 - 下午6:00'),
+('s_07', '星期日', '下午12:00 - 下午6:00'),
+('s_08', '星期一', '休息'),
+('s_08', '星期三', '下午2:00 - 下午6:30'),
+('s_08', '星期二', '下午2:00 - 下午6:30'),
+('s_08', '星期五', '下午2:00 - 下午6:30'),
+('s_08', '星期六', '下午2:00 - 下午6:30'),
+('s_08', '星期四', '下午2:00 - 下午6:30'),
+('s_08', '星期日', '休息'),
+('s_09', '星期一', '休息'),
+('s_09', '星期三', '上午11:30–下午8:00'),
+('s_09', '星期二', '上午11:30–下午8:00'),
+('s_09', '星期五', '上午11:30–下午8:00'),
+('s_09', '星期六', '上午11:30–下午8:00'),
+('s_09', '星期四', '上午11:30–下午8:00'),
+('s_09', '星期日', '上午11:30–下午8:00'),
+('s_10', '星期一', '下午2:00–下午8:00'),
+('s_10', '星期三', '下午2:00–下午8:00'),
+('s_10', '星期二', '下午2:00–下午8:00'),
+('s_10', '星期五', '下午2:00–下午8:00'),
+('s_10', '星期六', '下午2:00–下午6:00'),
+('s_10', '星期四', '下午2:00–下午8:00'),
+('s_10', '星期日', '下午2:00–下午6:00');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `shop`
 --
 
@@ -225,7 +313,6 @@ CREATE TABLE `shop` (
   `shop_Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `shop_Address` varchar(250) NOT NULL,
   `shop_ForHere` tinyint(1) DEFAULT NULL COMMENT '1:內用 0:外帶',
-  `shop_OpenTime` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '營業時間',
   `shop_Photo` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -233,17 +320,17 @@ CREATE TABLE `shop` (
 -- 傾印資料表的資料 `shop`
 --
 
-INSERT INTO `shop` (`shop_ID`, `shop_Name`, `shop_Phone`, `shop_Website`, `shop_IG`, `shop_FB`, `shop_Email`, `shop_Address`, `shop_ForHere`, `shop_OpenTime`, `shop_Photo`) VALUES
-('s_01', '不能吃糖的貓', '034350757', NULL, 'https://www.instagram.com/suger_love_cat', '', NULL, '320桃園市中壢區興仁路二段303號\r\n', 1, '\"週一 未營業\r\n週二 下午2:30 - 下午10:00\r\n週三 下午2:30 - 下午10:00\r\n週四 下午2:30 - 下午10:00\r\n週五 下午2:30 - 下午10:00\r\n週六 下午2:30 - 下午10:00\r\n週日 下午2:30 - 下午10:00\"\r\n', NULL),
-('s_02', '哈囉 hello 甜點店', '0966020665', NULL, NULL, 'https://hello-dessert-shop.business.site/', 'HelloHello2329@gmail.com', '334桃園市八德區中華北街10號\r\n', 1, '週一 中午12:00 - 下午8:00\r\n週二 中午12:00 - 下午8:00\r\n週三 中午12:00 - 下午8:00\r\n週四 中午12:00 - 下午8:00\r\n週五 中午12:00 - 下午8:00\r\n週六 中午12:00 - 下午8:00\r\n週日 中午12:00 - 下午8:00\r\n', NULL),
-('s_03', '兔子的森林甜點', '0906582402', NULL, 'https://www.instagram.com/rabbit_dessert_/', 'https://www.facebook.com/RabbitDessert/?locale=zh_TW', NULL, '桃園市中壢區大仁五街15號', 1, '星期一        13:00–21:00\r\n星期二        13:00–21:00\r\n星期三        13:00–21:00\r\n星期四        13:00–21:00\r\n星期五        13:00–21:00\r\n星期六        13:00–21:00\r\n星期日        13:00–21:00', NULL),
-('s_04', '甜點先生', '0928378314', NULL, 'https://www.instagram.com/mr.sweets_taiwan?fbclid=IwAR25aQRQlIfdzC8dS4MZL_LWSdsZ391L7j7utGEECug9vClOI-7SIBXd2BY', 'https://www.facebook.com/profile.php?id=100076890150974', NULL, '桃園市中壢區龍岡路三段634號1樓', 0, '星期一        11:00–20:00\r\n星期二        11:00–20:00\r\n星期三        11:00–20:00\r\n星期四        11:00–20:00\r\n星期五        11:00–20:00\r\n星期六        11:00–20:00\r\n星期日        11:00–20:00', NULL),
-('s_05', '恬品軒 ROOM 4 DESSERT SOGO中壢店', '034256711', 'https://r4d.com.tw/', NULL, 'https://www.facebook.com/r4dessert/', 'service@r4-dessert.com', '桃園縣中壢市元化路357號 B1', 1, '星期一        11:00–22:00\r\n星期二        11:00–22:00\r\n星期三        11:00–22:00\r\n星期四        11:00–22:00\r\n星期五        11:00–22:00\r\n星期六        11:00–22:00\r\n星期日        11:00–22:00', NULL),
-('s_06', '橘村屋 桃園站前站', '033946153', 'https://kmcake.tw/', 'https://www.instagram.com/kmcake_official/', 'https://www.facebook.com/kitsumuraya/?locale=zh_TW', NULL, '桃園市桃園區中正路43號', 0, '星期一        11:00–22:00\r\n星期二        11:00–22:00\r\n星期三        11:00–22:00\r\n星期四        11:00–22:00\r\n星期五        11:00–22:00\r\n星期六        11:00–22:00\r\n星期日        11:00–22:00', NULL),
-('s_07', '微楓甜點', '033797789', NULL, 'https://www.instagram.com/micromaple_dessert/', 'https://www.facebook.com/micromaple/', NULL, '桃園市桃園區龍泉六街18號', 1, '星期一	12:00–18:00\r\n星期二	休息\r\n星期三	12:00–18:00\r\n星期四	12:00–18:00\r\n星期五	12:00–18:00\r\n星期六	12:00–18:00\r\n星期日	12:00–18:00', NULL),
-('s_08', '局外人甜點 中原分店', '0972010734', NULL, 'https://www.instagram.com/outsiders_4/', 'https://www.facebook.com/professional.tarte?locale=zh_TW', 'outsiders.four@gmail.com', '桃園市中壢區大仁二街18之1號', 1, '星期一	休息\r\n星期二	14:00–18:30\r\n星期三	14:00–18:30\r\n星期四	14:00–18:30\r\n星期五	14:00–18:30\r\n星期六	14:00–18:30\r\n星期日	休息', NULL),
-('s_09', '小初心法式甜點', '033783426', NULL, 'https://www.instagram.com/bonheur0122_patisserie/', 'https://www.facebook.com/bonheur327?locale=zh_TW', NULL, '桃園市桃園區國聖一街111號', 1, '星期一	休息\r\n星期二	11:30–20:00\r\n星期三	11:30–20:00\r\n星期四	11:30–20:00\r\n星期五	11:30–20:00\r\n星期六	11:30–20:00\r\n星期日	11:30–20:00\r\n', NULL),
-('s_10', 'MOFA魔法氛子', '034370010', 'www.specialthank.com/shop', 'https://www.instagram.com/love_mofa/', 'https://www.facebook.com/MOFAsLOVE/', NULL, '桃園市中壢區力行北街33號', 1, '星期一        14:00–20:00\r\n星期二        14:00–20:00\r\n星期三        14:00–20:00\r\n星期四        14:00–20:00\r\n星期五        14:00–20:00\r\n星期六        14:00–18:00\r\n星期日        14:00–18:00', NULL);
+INSERT INTO `shop` (`shop_ID`, `shop_Name`, `shop_Phone`, `shop_Website`, `shop_IG`, `shop_FB`, `shop_Email`, `shop_Address`, `shop_ForHere`, `shop_Photo`) VALUES
+('s_01', '不能吃糖的貓', '034350757', NULL, 'https://www.instagram.com/suger_love_cat', '', NULL, '320桃園市中壢區興仁路二段303號\r\n', 1, NULL),
+('s_02', '哈囉 hello 甜點店', '0966020665', NULL, NULL, 'https://hello-dessert-shop.business.site/', 'HelloHello2329@gmail.com', '334桃園市八德區中華北街10號\r\n', 1, NULL),
+('s_03', '兔子的森林甜點', '0906582402', NULL, 'https://www.instagram.com/rabbit_dessert_/', 'https://www.facebook.com/RabbitDessert/?locale=zh_TW', NULL, '桃園市中壢區大仁五街15號', 1, NULL),
+('s_04', '甜點先生', '0928378314', NULL, 'https://www.instagram.com/mr.sweets_taiwan?fbclid=IwAR25aQRQlIfdzC8dS4MZL_LWSdsZ391L7j7utGEECug9vClOI-7SIBXd2BY', 'https://www.facebook.com/profile.php?id=100076890150974', NULL, '桃園市中壢區龍岡路三段634號1樓', 0, NULL),
+('s_05', '恬品軒 ROOM 4 DESSERT SOGO中壢店', '034256711', 'https://r4d.com.tw/', NULL, 'https://www.facebook.com/r4dessert/', 'service@r4-dessert.com', '桃園縣中壢市元化路357號 B1', 1, NULL),
+('s_06', '橘村屋 桃園站前站', '033946153', 'https://kmcake.tw/', 'https://www.instagram.com/kmcake_official/', 'https://www.facebook.com/kitsumuraya/?locale=zh_TW', NULL, '桃園市桃園區中正路43號', 0, NULL),
+('s_07', '微楓甜點', '033797789', NULL, 'https://www.instagram.com/micromaple_dessert/', 'https://www.facebook.com/micromaple/', NULL, '桃園市桃園區龍泉六街18號', 1, NULL),
+('s_08', '局外人甜點 中原分店', '0972010734', NULL, 'https://www.instagram.com/outsiders_4/', 'https://www.facebook.com/professional.tarte?locale=zh_TW', 'outsiders.four@gmail.com', '桃園市中壢區大仁二街18之1號', 1, NULL),
+('s_09', '小初心法式甜點', '033783426', NULL, 'https://www.instagram.com/bonheur0122_patisserie/', 'https://www.facebook.com/bonheur327?locale=zh_TW', NULL, '桃園市桃園區國聖一街111號', 1, NULL),
+('s_10', 'MOFA魔法氛子', '034370010', 'www.specialthank.com/shop', 'https://www.instagram.com/love_mofa/', 'https://www.facebook.com/MOFAsLOVE/', NULL, '桃園市中壢區力行北街33號', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -325,6 +412,13 @@ ALTER TABLE `favorite`
   ADD KEY `favorite_user_ID` (`user_ID`);
 
 --
+-- 資料表索引 `opentime`
+--
+ALTER TABLE `opentime`
+  ADD PRIMARY KEY (`shop_ID`,`shop_OpenWeek`),
+  ADD KEY `shop_ID` (`shop_ID`) USING BTREE;
+
+--
 -- 資料表索引 `shop`
 --
 ALTER TABLE `shop`
@@ -368,6 +462,12 @@ ALTER TABLE `dessert`
 ALTER TABLE `favorite`
   ADD CONSTRAINT `favorite_shop_ID` FOREIGN KEY (`shop_ID`) REFERENCES `shop` (`shop_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `favorite_user_ID` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 資料表的限制式 `opentime`
+--
+ALTER TABLE `opentime`
+  ADD CONSTRAINT `opentime_shop_ID` FOREIGN KEY (`shop_ID`) REFERENCES `shop` (`shop_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 資料表的限制式 `visited`
