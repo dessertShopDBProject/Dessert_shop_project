@@ -9,7 +9,7 @@
 <body>
     <div class="wrap">
         <div class="navbar">
-            <h1 class="logo"><a href="index.html">搜蒐甜點店</a></h1>
+            <h1 class="logo"><a href="index.php">搜蒐甜點店</a></h1>
             <ul class="nav">
                 <li class="nav-content hide"><a href="#">收藏</a></li>
                 <li class="nav-content hide"><a href="#">圖鑑</a></li>
@@ -37,10 +37,7 @@
     </div>
 <?php
     require_once('db.php'); // 引入資料庫連線
-    // 檢查連接是否成功
-    if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-    }
+ 
     // Get the maximum user_ID
     $maxUserIdQuery = "SELECT MAX(CAST(SUBSTRING(user_ID, 2) AS UNSIGNED)) AS maxUserId FROM user";
     $result = $conn->query($maxUserIdQuery);
@@ -71,7 +68,7 @@
                 }
             }
             else{
-                echo "<script>alert('帳號已註冊');</script>";
+                echo "<script>alert('帳號已註冊');window.location.href='login.php'</script>";
                 exit();
             }
         }
@@ -81,6 +78,12 @@
     }
 
 ?>
+    <div class="footer">
+        <div class="left-footer"><img src='../image/logo-4.png'></div>
+        <div class="right-footer">
+            <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+        </div>
+    </div>
 <script src="all.js"></script>
 </body>
 </html>

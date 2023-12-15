@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    session_start();
+    //session_start();
 ?>
 <?php
 $userid=$_SESSION['nowUser']['user_ID'];
@@ -9,7 +9,7 @@ $shopID = $_GET['id'];
 $sql = "DELETE FROM favorite WHERE shop_ID='$shopID' AND user_ID='$userid'";
 
 if ($conn->query($sql) === TRUE) {
-    header("Location: favorite.php");
+    header("Location: favorite.php?userid=$userid");
     exit;
 } else {
     // 如果有錯誤，可以返回錯誤的回應

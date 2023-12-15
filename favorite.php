@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    session_start();
+    //session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +80,7 @@
                                     <p><i class='fas fa-map-marker-alt' style='color: #ea0b43;'></i>".$row["shop_Address"]."</p>
                                     <p><i class='fa-solid fa-phone' style='color: #21e448;'></i>".$row["shop_Phone"]."</p>
                                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi enim dignissimos beatae optio officiis ratione, dolore tempora. A non deserunt modi necessitatibus asperiores ipsum explicabo? Tempore voluptatem eligendi sed harum?</p>
-                                    <a class='heart' onclick='toggleHeart()' href='deleteFavorite.php?id=$shopID'>
+                                    <a class='heart' onclick='deletionFavorite(\"$shopID\")'>
                                         <i class='fa-solid fa-heart' style='color: #f10937;'></i>&nbsp;已收藏
                                     </a>
                                 </div>
@@ -101,6 +101,12 @@
             </div>
         </div>
     </div>
+    <div class="footer">
+            <div class="left-footer"><img src='../image/logo-4.png'></div>
+            <div class="right-footer">
+                <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+            </div>
+        </div>
     <script src="all.js"></script>
 </body>
 </html>

@@ -1,25 +1,37 @@
 
-$(document).ready(function() {
-    $(".favorite-link").click(function(){
-      var shopID = $(this).data('shopid');
-      var isFavorited = localStorage.getItem('favorited-' + shopID) === 'true';
-      isFavorited = !isFavorited;
-      localStorage.setItem('favorited-' + shopID, isFavorited);
-      updateFavoriteButton(shopID, isFavorited);
-    });
+$(document).ready(function(){
+  $("#index-zone-choice").click(function(){
+    $(".style-choice-dropdown").removeClass("style-choice-dropdown-active");
+    $(".zone-choice-dropdown").toggleClass("zone-choice-dropdown-active");
+  });
 
-    function updateFavoriteButton(isFavorited) {
-      // 根據收藏狀態更新按鈕的外觀
-      var heartIcon = $(".favorite-link i");
-      heartIcon.toggleClass("fa-solid", isFavorited);
-      heartIcon.toggleClass("fa-regular", !isFavorited);
-    }
-    $(".collect-link").click(function(){
-      $(".collect-link i").toggleClass("fa fa-plus fa-solid fa-check");
-    });
+  $("#index-style-choice").click(function(){
+    $(".zone-choice-dropdown").removeClass("zone-choice-dropdown-active");
+    $(".style-choice-dropdown").toggleClass("style-choice-dropdown-active");
+  });
+
+  $("#no-visited-input").click(function(){
+    $("#no-visited-label").css("background-color","gray");
+    $("#no-visited-label").css("color","white");
+  })
+
+  $("#four-star-input").click(function(){
+    $("#four-star-label").css("background-color","gray");
+    $("#four-star-label").css("color","white");
+  })
+
+  $(".dessert_tab li").click(function(){
+    $(this).siblings().removeClass("dessert_tab_active");
+    $(this).addClass("dessert_tab_active");
+    var selectedType = $(this).data('type');
+    $("#selectedType").val(selectedType);
+    $("#typeForm").submit();
+  })
+  
 });
+
 function openCommentForm() {
-  document.getElementById('commentFormOverlay').style.display = 'block';
+  document.getElementById('commentFormOverlay').style.display = 'flex';
 }
 
 function closeCommentForm() {
@@ -27,50 +39,21 @@ function closeCommentForm() {
 }
 
 function editCommentForm(){
-  document.getElementById('commentEditFormOverlay').style.display = 'block';
+  document.getElementById('commentEditFormOverlay').style.display = 'flex';
 }
 
 function closeEditCommentForm() {
   document.getElementById('commentEditFormOverlay').style.display = 'none';
 }
-
-/*
-//添加編輯評論評分樣式
-// 在页面加载时设置初始的评分图标样式
-document.addEventListener('DOMContentLoaded', function() {
-    var selectedRating = document.getElementById('selectedRating').value;
-    setRating(selectedRating);
+document.querySelector('.comment-submit').addEventListener('click', function (event) {
+  // Check if a rating is selected
+  if (document.getElementById('selectedRating').value === '') {
+      document.querySelector('.validation-message').style.display = 'block';
+      event.preventDefault(); // Prevent form submission
+  } else {
+      document.querySelector('.validation-message').style.display = 'none';
+  }
 });
-
-// 更新评分值和图标样式
-function setRating(rating) {
-    // 设置隐藏字段的值
-    document.getElementById('selectedRating').value = rating;
-
-    // 移除所有评分图标的活动样式
-    var ratingNumbers = document.querySelectorAll('.rating-number');
-    ratingNumbers.forEach(function(number) {
-        number.classList.remove('active');
-    });
-
-    // 添加活动样式到指定的评分图标
-    var selectedNumber = document.querySelector('.rating-number[data-rating="' + rating + '"]');
-    if (selectedNumber) {
-        selectedNumber.classList.add('active');
-    }
-}
-
-// 处理用户点击评分图标事件
-document.addEventListener('DOMContentLoaded', function() {
-    var ratingNumbers = document.querySelectorAll('.rating-number');
-    ratingNumbers.forEach(function(number) {
-        number.addEventListener('click', function() {
-            setRating(number.getAttribute('data-rating'));
-        });
-    });
-});
-*/
-
 
 var ratingNumbers = document.querySelectorAll('.rating-number');
 ratingNumbers.forEach(function (ratingNumber) {
@@ -96,17 +79,40 @@ function setEditRating(rating) {
   const ratingIcon = document.querySelector(`.rating-number[onclick="setEditRating(${rating})"]`);
   const selectedRatingInput = document.querySelector(`input[name="selected_edit_rating"]`);
   selectedRatingInput.value = rating;
-  console.log(rating);
 }
 
 function submitForm(){
-  document.querySelector(".comment-search form").submit();
+  document.querySelector(".comment-search>form").submit();
 }
 
 
-function toggleHeart() {
-  if (confirm("確定取消收藏嗎") == true) {
-    document.querySelector(".favorite-shop-content form").submit();
+function deletionAlert(shopID){
+  if (confirm("確定要刪除評論嗎？")) {
+    window.location.href = "delete_comment.php?shop_id=" + shopID;
+  } else {
+    window.location.href = "shop_info.php?shop_id=" + shopID;
   }
 }
 
+function deletionFavorite(shopID){
+  if (confirm("確定要取消收藏嗎？")) {
+    window.location.href = "deleteFavorite.php?id=" + shopID;
+  }
+}
+
+function deletionUser(userID){
+  console.log('hi');
+  if (confirm("確定要刪除帳號嗎？")) {
+    window.location.href = "delete_userinfo.php?user_id=" + userID;
+  } else {
+    window.location.href = "user_info.php?user_id=" + userID;
+  }
+}
+
+function setIndexZone(){
+  var selected_zone=document.querySelectorAll('.zone-choice-dropdown>li')
+  var indexSelectedZone=document.getElementById(indexSelectedZone);
+  indexSelectedZone.value=selected_zone;
+  console.log(indexSelectedZone);
+  
+}

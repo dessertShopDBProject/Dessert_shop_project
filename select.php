@@ -1,7 +1,7 @@
 <?php
 // 載入db.php來連結資料庫
 require_once 'db.php';
-session_start();
+//session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,8 +36,8 @@ session_start();
         </div>
         <div class="main">
         <form action="select.php" method="GET">
-            <div class="search-section">
-                <input type="text" placeholder="請輸入店名關鍵字" name="keyword" class="search-bar">
+            <div class="select-search-section">
+                <input type="text" placeholder="請輸入店名或甜點關鍵字" name="keyword" class="select-search-bar">
                 <select class="zone-choice" name="zone-choice">
                     <option value="all">全部</option>
                     <option value="中壢區">中壢區</option>
@@ -54,6 +54,19 @@ session_start();
                     <option value="新屋區">新屋區</option>
                     <option value="楊梅區">楊梅區</option>
                 </select>
+                <select class="style-choice" name="style-choice">
+                    <option value='all'>全部</option>
+                <?php //更改處
+                    $sql = "
+                    SELECT *
+                    FROM desstype";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                            echo "<option value='".$row['desstype_Name']."'>".$row['desstype_Name']."</option>";
+                        }}
+                ?>
+                </select>
                 <?php
                 if (isset($_SESSION['nowUser'])) {
                     echo "<input type='checkbox' name='no-visited' id='no-visited'>
@@ -67,25 +80,37 @@ session_start();
                 <input type="submit" value="搜尋" class="search-button">
             </div>
         </form>
-    <div id="search-result">
+        <div id="search-result">
         <?php
+            if (isset($_SESSION['indexSearchResultHTML'])) {
+                echo $_SESSION['indexSearchResultHTML'];
+                #unset($_SESSION['indexSearchResultHTML']);
+            }
+            else{
             $searchTerm=array();
-            $keyword=$_GET['keyword'];
-            $zone = $_GET['zone-choice'];
-            $userID=$_SESSION['nowUser']['user_ID'];
+            $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+            $zone = isset($_GET['zone-choice']) ? $_GET['zone-choice'] :'';
+            $style= isset($_GET['style-choice']) ? $_GET['style-choice'] :'';
+            if (isset($_SESSION['nowUser']['user_ID'])) {
+                $userID = $_SESSION['nowUser']['user_ID'];
+            }
             $noVisited = isset($_GET['no-visited']) ? true : false;
             $fourStar = isset($_GET['four-star']) ? true : false;
             
-            $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address 
+            $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address,shop_Phone 
             FROM shop 
-            LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID";
+            LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID
+            LEFT JOIN desstype ON dessert.desstype_ID=desstype.desstype_ID";
             $sql .= " WHERE 1=1";  // To always have a valid condition to append
             
             if ($keyword !== null) {
-                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%')";
+                $sql .= " AND (shop_Name LIKE '%$keyword%' OR dess_Name LIKE '%$keyword%' OR desstype_Name LIKE '%$keyword%')";
             }
             if ($zone !== 'all') {
                 $sql .= " AND shop_Address LIKE '%$zone%'";
+            }
+            if ($style !== "all") {
+                $sql .= " AND desstype_Name='$style'";
             }
             if ($noVisited) {
                 $sql .= " AND shop.shop_ID NOT IN (SELECT shop_ID FROM visited WHERE user_ID='$userID')";
@@ -96,11 +121,10 @@ session_start();
             }
 
             $result = $conn->query($sql);
-
+            
             // 顯示查詢結果
             echo "<ul class='shop-list'>";
             if ($result->num_rows > 0) {
-               
             while ($row = $result->fetch_assoc()) {
                 $shopID=$row["shop_ID"];
                 $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
@@ -111,33 +135,48 @@ session_start();
                     <li>
                     <img src='#' alt=$shopName>
                     <div class='shop-list-content'>
-                        <div class='name-and-comment'>
                             <h2>$shopName</h2>";
-                            if($result_rating->num_rows > 0) {
-                                $row_rating = $result_rating->fetch_assoc();
-                                echo "<p>" .round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i></p>";
-                            };
-                echo "
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere quod ipsa natus necessitatibus quae asperiores in at qui nihil repellat iusto sunt architecto delectus, sit deleniti, veritatis reprehenderit dolores accusantium?
-                        Possimus, quibusdam culpa assumenda aliquam vitae at enim sapiente provident reprehenderit, architecto optio quaerat rem temporibus fugiat recusandae tempore dolorem natus obcaecati molestias. Quas hic quaerat veniam porro aspernatur nesciunt!</p>
-                        <p><i class='fas fa-map-marker-alt' style='color: #fb1313;'></i>".$row['shop_Address']."</p>
-                        <p>
-                            <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項一 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i>品項二 <i class='fa-solid fa-tags' style='color: #FF9B8F'></i> 品項三
-                        </p>
+                        echo "
+                        <p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>
+                        <p><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>".$row['shop_Address']."</p>
+                        <p>";
+                        $tagSql="SELECT COUNT(desstype_Name) AS SumofType,desstype_Name FROM dessert,desstype,shop
+                        WHERE dessert.desstype_ID=desstype.desstype_ID  AND shop.shop_ID=dessert.shop_ID AND shop.shop_ID='$shopID'
+                        GROUP BY desstype_Name ORDER BY SumofType DESC LIMIT 3";
+                        $result_tag=$conn->query($tagSql);
+                        if($result_tag->num_rows>0){
+                            while($row_tag = $result_tag->fetch_assoc())
+                            {
+                                if($row_tag["desstype_Name"]!= "其他"){
+                                    echo  "<i class='fa-solid fa-tags' style='color: #FF9B8F;margin:5px;'></i>".$row_tag['desstype_Name']."";}
+                            }
+                        }    
+                        echo "</p>
                         <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
                     </div>
-                    </li>";
+                    <p>";
+                    if($result_rating->num_rows > 0) {
+                        $row_rating = $result_rating->fetch_assoc();
+                        echo round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i>";
+                    };
+                    echo "</p></li>";
                 }
             } else {
-                echo "<script>alert('没有找到匹配的结果'); window.location.href = 'index.php';</script>";
+                echo "<script>alert('没有找到匹配的结果'); window.location.href = 'select.php';</script>";
                 exit();
             }
             echo "</ul>";
-            
+        }
             // 關閉資料庫連接
             $conn->close();
             ?>
+        </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="left-footer"><img src='../image/logo-4.png'></div>
+        <div class="right-footer">
+            <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
         </div>
     </div>
 </body>

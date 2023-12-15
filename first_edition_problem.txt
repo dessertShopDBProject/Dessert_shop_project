@@ -1,0 +1,22 @@
+index.php
+1. 風格的選擇 ok
+2. footer ok
+3. 最多人收藏的店和大家都去排版有需要改?
+
+shop_info.php
+1. 收藏、去過 的 icon 無法轉換(能正常新增刪除，icon 換不了)ok
+2. 評論的修改部分有問題 ok
+3. session 會有 warning ok
+
+favorite.php
+1. 搜尋沒有相關內容的版面要調整 ok
+
+gallery.php
+1. 有沒有需要加入刪除? 目前刪除只有在shop_info 頁面
+
+user_info.php
+1. 修改資料還沒做 ok
+
+login.php
+1. 有沒有需要設定幾分鐘後自動登出? ok 
+2. 跳出帳號已經註冊，跳到登入，目前沒成功 ok

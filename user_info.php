@@ -1,7 +1,6 @@
 <?php
-        require_once('db.php'); // 引入資料庫連線
-
-        session_start();
+    require_once('db.php'); // 引入資料庫連線
+    //session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="all.js"></script>
     <link rel="stylesheet" href="all.css">
     
 </head>
@@ -63,8 +63,9 @@
             $passwordResult = $conn->query($passwordQuery);
             $password = $passwordResult->fetch_assoc();
             $password = $password["user_Password"];
-
+            $maskedPassword = str_repeat('*', strlen($password));
             // 從資料庫中選擇圖片
+            /*
             $sql = "SELECT user_Photo FROM user WHERE user_ID = '$showUser'";
             $result = $conn->query($sql);
             // 檢查查詢是否成功
@@ -76,19 +77,20 @@
                 $userPhoto =  $row['user_Photo'];
 
 
-            }
+            }*/
             echo"
             <div class='main-user-info'>
-                <div class='setting'>
-                <img src='data:image/png;base64," . base64_encode($userPhoto) . "' alt='user_photo' style='width: 350px; height: 400px;' />
-                
+                <div class='setting'>";
+                /*<img src='data:image/png;base64," . base64_encode($userPhoto) . "' alt='user_photo' style='width: 350px; height: 400px;' />*/
+            echo "
                     <p><a href='adjust_uinfo.php'>修改資料</a></p>
+                    <p><button type='submit' onclick=\"deletionUser('$showUser')\">刪除帳號</button></p>
                     <p><a href='logout.php'>登出</a></p>
                 </div>
                 <div class='info'>
                     <p>名稱(暱稱):".$nickName."</p>
                     <p>電子郵件:".$email."</p>
-                    <p>密碼:".$password."</p>
+                    <p>密碼:".$maskedPassword."</p>
                     <div class='link'>";
                     echo "
                         <a href='favorite.php?userid=$showUser' class='favorite'>
@@ -103,6 +105,11 @@
             </div>";
         }
     ?>
-
+    <div class="footer">
+        <div class="left-footer"><img src='../image/logo-4.png'></div>
+        <div class="right-footer">
+            <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
+        </div>
+    </div>
 </body>
 </html>
