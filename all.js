@@ -1,5 +1,9 @@
 
 $(document).ready(function(){
+  var storedSelectedType = localStorage.getItem("selectedType");
+  if (storedSelectedType) {
+      $(".dessert_tab li[data-type='" + storedSelectedType + "']").addClass("dessert_tab_active");
+  }
   $("#index-zone-choice").click(function(){
     $(".style-choice-dropdown").removeClass("style-choice-dropdown-active");
     $(".zone-choice-dropdown").toggleClass("zone-choice-dropdown-active");
@@ -25,6 +29,7 @@ $(document).ready(function(){
     $(this).addClass("dessert_tab_active");
     var selectedType = $(this).data('type');
     $("#selectedType").val(selectedType);
+    localStorage.setItem("selectedType", selectedType);
     $("#typeForm").submit();
   })
   
