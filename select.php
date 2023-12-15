@@ -135,31 +135,31 @@ require_once 'db.php';
                     <li>
                     <img src='#' alt=$shopName>
                     <div class='shop-list-content'>
-                        <div class='name-and-comment'>
                             <h2>$shopName</h2>";
-                            if($result_rating->num_rows > 0) {
-                                $row_rating = $result_rating->fetch_assoc();
-                                echo "<p>" .round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i></p>";
-                            };
-                echo "
-                        </div>
+                        echo "
                         <p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>
-                        <p><i class='fas fa-map-marker-alt' style='color: #fb1313;'></i>".$row['shop_Address']."</p>
+                        <p><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>".$row['shop_Address']."</p>
                         <p>";
                         $tagSql="SELECT COUNT(desstype_Name) AS SumofType,desstype_Name FROM dessert,desstype,shop
                         WHERE dessert.desstype_ID=desstype.desstype_ID  AND shop.shop_ID=dessert.shop_ID AND shop.shop_ID='$shopID'
                         GROUP BY desstype_Name ORDER BY SumofType DESC LIMIT 3";
                         $result_tag=$conn->query($tagSql);
                         if($result_tag->num_rows>0){
-                            while($row_tag = $result_tag->fetch_assoc()){
-                                echo  "<i class='fa-solid fa-tags' style='color: #FF9B8F;margin:5px;'></i>".$row_tag['desstype_Name']."";
+                            while($row_tag = $result_tag->fetch_assoc())
+                            {
+                                if($row_tag["desstype_Name"]!= "其他"){
+                                    echo  "<i class='fa-solid fa-tags' style='color: #FF9B8F;margin:5px;'></i>".$row_tag['desstype_Name']."";}
                             }
-                            
                         }    
                         echo "</p>
                         <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
                     </div>
-                    </li>";
+                    <p>";
+                    if($result_rating->num_rows > 0) {
+                        $row_rating = $result_rating->fetch_assoc();
+                        echo round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i>";
+                    };
+                    echo "</p></li>";
                 }
             } else {
                 echo "<script>alert('没有找到匹配的结果'); window.location.href = 'select.php';</script>";
