@@ -214,10 +214,6 @@ img{
     border:none;
     border-radius:5px;
 }
-.no-visited-active,.four-star-active{
-    background:gray !important;
-    color:white !important;
-}
 #no-visited-label{
     width:120px;
 }
@@ -679,7 +675,7 @@ img{
 .shop-list-content{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-left:10px;
 }
 .name-and-comment{

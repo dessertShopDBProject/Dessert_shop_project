@@ -7,8 +7,14 @@ $searchTypeResultHTML = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['selectedType'];
     $shopID = $_POST['shop_id'];
-    $sql = "SELECT * FROM dessert,desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID = '$shopID' AND desstype_Name='$type'";
-    $result = $conn->query($sql);
+    if($type == "全部"){
+        $sql = "SELECT * FROM dessert,desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID = '$shopID'";
+        $result = $conn->query($sql);
+    }
+    else{
+        $sql = "SELECT * FROM dessert,desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID = '$shopID' AND desstype_Name='$type'";
+        $result = $conn->query($sql);
+    }
 } 
 else {
     $sql = "SELECT * FROM dessert,desstype WHERE dessert.desstype_ID=desstype.desstype_ID AND shop_ID = '$shopID'";

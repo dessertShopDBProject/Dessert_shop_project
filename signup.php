@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up Page</title>
     <link rel="stylesheet" href="all.css">
 </head>
+
 <body>
     <div class="wrap">
         <div class="navbar">
-            <h1 class="logo"><a href="index.php">搜蒐甜點店</a></h1>
+            <?php
+            if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
+                echo "<h1 class='logo'><a href='manager_index.php'>搜蒐甜點店</a></h1>";
+            } else {
+                echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
+            }
+            ?>
             <ul class="nav">
                 <li class="nav-content hide"><a href="#">收藏</a></li>
                 <li class="nav-content hide"><a href="#">圖鑑</a></li>
@@ -33,11 +41,11 @@
             <input type="submit" value="註冊" class="signup-button">
             <a href="login.php">已經有帳號?</a>
         </form>
-        
+
     </div>
-<?php
+    <?php
     require_once('db.php'); // 引入資料庫連線
- 
+    
     // Get the maximum user_ID
     $maxUserIdQuery = "SELECT MAX(CAST(SUBSTRING(user_ID, 2) AS UNSIGNED)) AS maxUserId FROM user";
     $result = $conn->query($maxUserIdQuery);
@@ -47,7 +55,7 @@
         $maxUserId = $row['maxUserId'];
         // Increment the maximum user_ID to generate a new one
         $newUserId = 'u' . str_pad($maxUserId + 1, strlen($maxUserId), '0', STR_PAD_LEFT);
-        
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // 獲取用戶輸入的資訊
             $nickname = $_POST["nickname"];
@@ -56,18 +64,16 @@
 
             $query = "SELECT * From user Where user_Email = '$email' ";
             $result = $conn->query($query);
-            if ($result -> num_rows <= 0) {
+            if ($result->num_rows <= 0) {
                 $putin = "INSERT INTO user (user_ID,user_NickName,user_Email, user_Password) VALUES ('$newUserId','$nickname','$email', '$password')";
                 if ($conn->query($putin) == TRUE) {
                     echo "<script>alert('Sign up successful!');</script>";
                     header("Location: login.php");
                     exit();
-                } 
-                else {
+                } else {
                     echo "<script>alert('Error: " . $putin . "<br>" . $conn->error . "');</script>";
                 }
-            }
-            else{
+            } else {
                 echo "<script>alert('帳號已註冊');window.location.href='login.php'</script>";
                 exit();
             }
@@ -77,13 +83,14 @@
         $conn->close();
     }
 
-?>
+    ?>
     <div class="footer">
         <div class="left-footer"><img src='../image/logo-4.png'></div>
         <div class="right-footer">
             <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
         </div>
     </div>
-<script src="all.js"></script>
+    <script src="all.js"></script>
 </body>
+
 </html>
