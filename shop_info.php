@@ -130,7 +130,7 @@ require_once 'process_comment.php';
                         echo "<li class='collect-link'><a href='addToGallery.php?id=$shopID'><i class='fa fa-plus' aria-hidden='true'></i>圖鑑</a></li>";
                     }
                     if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo "<li class='collect-link'><a href='manager_shop_adjust.php?shop_ID=" . $row["shop_ID"] . "'><i class='fa fa-pencil' aria-hidden='true'></i>修改</a></li>";
+                        echo "<li class='collect-link'><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><i class='fa fa-pencil' aria-hidden='true'></i>修改</a></li>";
                     }
                 } else {
                     echo "<li class='favorite-link' data-shopid=$shopID><a href='addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>
