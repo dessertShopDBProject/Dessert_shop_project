@@ -426,7 +426,10 @@ img{
 .left-content img{
     margin-top:20px;
 }
-
+.left-top{
+    display: flex;
+    justify-content: space-between;
+}
 .shop-name{
     padding:10px;
     width:200px;
@@ -498,7 +501,7 @@ img{
 .simple-intro{
     display: flex;
     justify-content: space-between;
-
+    flex-direction: column;
 }
 .shop-contact{
     display: flex;
@@ -513,21 +516,21 @@ img{
 .shop-info li{
     list-style-type:none;
 }
-.opening-time{
-    border-collapse: collapse;
-}
+
 .opening-time {
-    width: 300px;
+    width:45%;
+    max-height:350px;
     border-collapse: collapse;
-    margin: 10px;
+    margin: 40px 20px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
-.opening-time th, td {
-    padding: 5px;
+.opening-time th, .opening-time td {
+    padding:10px;
     text-align: center;
+    vertical-align: middle;
     border-bottom: 1px solid #ddd;
 }
 

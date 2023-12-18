@@ -60,6 +60,7 @@ require_once 'process_comment.php';
                 $row = $result->fetch_assoc();
                 echo "
                 <div class='left-content'>
+                    <div class='left-top'>
                     <div class='simple-intro'>
                         <div class='shop-image'>
                             <img src='../image/dessert.jpg' alt='店面照片'>
@@ -71,24 +72,30 @@ require_once 'process_comment.php';
                                 <li class='address'><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>" . $row['shop_Address'] . "</li>
                                 <li class='phone'><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>" . $row['shop_Phone'] . "</li>
                                 <li>";
-                if ($row["shop_ForHere"] == 1) {
-                    echo "<li><i class='fa-solid fa-note-sticky' style=' margin-right:5px;'></i>可內用</li>";
-                }
-                echo "</li>
-                                <li><ul class='shop-contact'>";
-                if ($row["shop_Email"] != "") {
-                    echo "<li class='email'><a href='mailto:" . $row['shop_Email'] . "'><i class='fa-solid fa-envelope' style='color: #021211; margin-right:10px;'></i></a></li>";
-                }
-                if ($row["shop_FB"] != "") {
-                    echo "<li><a href='" . $row['shop_FB'] . "'><i class='fab fa-facebook-square' style='color: #3f76d5;margin-right:10px;'></i></a></li>";
-                }
-                if ($row["shop_IG"] != "") {
-                    echo "<li><a href='" . $row['shop_IG'] . "'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:10px;></i></a></li>";
-                }
-                if ($row["shop_Website"] != "") {
-                    echo "<li><a href='" . $row['shop_Website'] . "'><i class='fa-solid fa-globe' style='margin-right:10px;'></i></a></li>";
-                }
-                echo "</ul></li>";
+                                if ($row["shop_ForHere"] == 1) {
+                                    echo "<li><i class='fa-solid fa-note-sticky' style=' margin-right:5px;'></i>可內用</li>";
+                                }
+                                echo "</li>
+                                                <li><ul class='shop-contact'>";
+                                if ($row["shop_Email"] != "") {
+                                    echo "<li class='email'><a href='mailto:" . $row['shop_Email'] . "'><i class='fa-solid fa-envelope' style='color: #021211; margin-right:10px;'></i></a></li>";
+                                }
+                                if ($row["shop_FB"] != "") {
+                                    echo "<li><a href='" . $row['shop_FB'] . "'><i class='fab fa-facebook-square' style='color: #3f76d5;margin-right:10px;'></i></a></li>";
+                                }
+                                if ($row["shop_IG"] != "") {
+                                    echo "<li><a href='" . $row['shop_IG'] . "'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:10px;></i></a></li>";
+                                }
+                                if ($row["shop_Website"] != "") {
+                                    echo "<li><a href='" . $row['shop_Website'] . "'><i class='fa-solid fa-globe' style='margin-right:10px;'></i></a></li>";
+                                }
+                                echo "</li></ul></div>";
+                        echo "</div>";
+                echo "
+                <table class='opening-time'>
+                    <tr>
+                        <th colspan='2'>營業時間</th>
+                    </tr>";
                 $mon_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期一'";
                 $tue_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期二'";
                 $wed_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期三'";
@@ -96,11 +103,7 @@ require_once 'process_comment.php';
                 $fri_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期五'";
                 $sat_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期六'";
                 $sun_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期日'";
-                echo "<li>
-                    <table class='opening-time'>
-                        <tr>
-                            <th colspan='2'>營業時間</th>
-                        </tr>";
+                
                 $mon_result = $conn->query($mon_sql);
                 $tue_result = $conn->query($tue_sql);
                 $wed_result = $conn->query($wed_sql);
@@ -164,13 +167,9 @@ require_once 'process_comment.php';
                             <td>".$sun_row['shop_OpenTime']."</td>
                         </tr>";
                 }
-                echo "</table>
-                </li>";
-                
-                    echo "</ul>
-                        </div>
-                    </div>
-                    <ul class='add'>";
+                echo "</table></div>";
+                  
+                echo "<ul class='add'>";
                 if (isset($_SESSION['nowUser']['user_ID'])) {
                     $favorite_sql = "SELECT * FROM favorite WHERE shop_ID='$shopID' AND user_ID='$userID'";
                     $result_favorite = $conn->query($favorite_sql);
