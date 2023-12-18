@@ -214,6 +214,10 @@ img{
     border:none;
     border-radius:5px;
 }
+.no-visited-active,.four-star-active{
+    background:gray !important;
+    color:white !important;
+}
 #no-visited-label{
     width:120px;
 }
@@ -663,7 +667,7 @@ img{
 }
 .shop-list li{
     display: flex;
-    justify-content: flex-start;
+    justify-content:space-between;
     border:2px solid #F591B3;
     border-radius:10px;
     padding:10px;
@@ -672,11 +676,25 @@ img{
 .shop-list img{
     width:300px;
 }
+.shop-list>li>div{
+    display: flex;
+    justify-content: flex-start;
+}
 .shop-list-content{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    margin-left:10px;
+    justify-content: space-between;
+    margin-left: 50px;
+}
+.shop-list-content h2{
+    font-weight: bolder;
+    color:#5B2B1E;
+    font-size:25px;
+}
+.shop-list>li>p{
+    float:right;
+    font-size: 25px;
+    font-weight: bolder;
 }
 .name-and-comment{
     display: flex;
