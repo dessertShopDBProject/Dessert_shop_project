@@ -52,12 +52,12 @@
                 <li>
                 <img src='#' alt=$shopName>
                 <div class='shop-list-content'>
-                    <div class='name-and-comment'>
+                    <div class='name-and-content'>
                         <h2>$shopName</h2>";
                         if($result_rating->num_rows > 0) {
                             $row_rating = $result_rating->fetch_assoc();
                             $indexSearchResultHTML.= "<p>" .round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i></p>";
-                        };
+                        }
         $indexSearchResultHTML.= "
                     </div>
                     <p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>
@@ -75,11 +75,14 @@
                     }    
                     $indexSearchResultHTML.= "</p>
                     <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
-                </div>
-                </li>";
+               ";
+                
+                echo " </li>";
             }
         } else {
             $indexSearchResultHTML.= "<script>alert('没有找到匹配的结果'); window.location.href = 'index.php';</script>";
+            echo $indexSearchResultHTML;
+            exit;
         }
         $indexSearchResultHTML.= "</ul>";
         $_SESSION['indexSearchResultHTML'] = $indexSearchResultHTML;
