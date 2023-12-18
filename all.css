@@ -835,13 +835,14 @@ img{
 .favorite-shop-detail{
     padding:20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 .favorite-shop-detail img{
-    width:80%;
+    width:30%;
+    border:1px solid black;
 }
 .favorite-shop-content{
-    margin-left:20px;
+    margin-left:50px;
 }
 .favorite-shop-content p{
     margin-top:10px;
@@ -853,13 +854,16 @@ img{
     padding:10px;
     border-radius: 3px;
     color:#5B2B1E;
-    width:15%;
     margin-top:20px;
 }
 .favorite-shop-content .heart:hover{
     background-color: #A68F7B;
     color:#5B2B1E;
     cursor: pointer;
+}
+.favorite-shop-content a{
+    text-decoration: none;
+    color:#5B2B1E;
 }
 /*sign-up and login*/
 .signup,.login{
