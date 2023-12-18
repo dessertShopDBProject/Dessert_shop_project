@@ -83,12 +83,11 @@ require_once 'db.php';
                                 while ($row = $result->fetch_assoc()) {
                                     $shopID = $row["shop_ID"];
                                     echo "<li class='favorite-shop-detail'>
-                                <img src='#' alt=''>
+                                <img src='#' alt='".$row['shop_Name']."'>
                                 <div class='favorite-shop-content'>
                                     <h2><a href='shop_info.php?shop_id=$shopID'>" . $row["shop_Name"] . "</a></h2>
-                                    <p><i class='fas fa-map-marker-alt' style='color: #ea0b43;'></i>" . $row["shop_Address"] . "</p>
-                                    <p><i class='fa-solid fa-phone' style='color: #21e448;'></i>" . $row["shop_Phone"] . "</p>
-                                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi enim dignissimos beatae optio officiis ratione, dolore tempora. A non deserunt modi necessitatibus asperiores ipsum explicabo? Tempore voluptatem eligendi sed harum?</p>
+                                    <p><i class='fas fa-map-marker-alt' style='color: #ea0b43;margin-right:10px;'></i>" . $row["shop_Address"] . "</p>
+                                    <p><i class='fa-solid fa-phone' style='color: #21e448;margin-right:10px;'></i>" . $row["shop_Phone"] . "</p>
                                     <a class='heart' onclick='deletionFavorite(\"$shopID\")'>
                                         <i class='fa-solid fa-heart' style='color: #f10937;'></i>&nbsp;已收藏
                                     </a>

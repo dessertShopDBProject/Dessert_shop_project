@@ -32,7 +32,7 @@ require_once('db.php'); // 引入資料庫連線
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理<br>店家</a></li>';
+                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
                     }
                     echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
                     echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';

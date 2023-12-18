@@ -31,7 +31,7 @@ require_once 'process_comment.php';
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理<br>店家</a></li>';
+                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
                     }
                     echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
                     echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
@@ -89,26 +89,85 @@ require_once 'process_comment.php';
                     echo "<li><a href='" . $row['shop_Website'] . "'><i class='fa-solid fa-globe' style='margin-right:10px;'></i></a></li>";
                 }
                 echo "</ul></li>";
+                $mon_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期一'";
+                $tue_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期二'";
+                $wed_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期三'";
+                $thr_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期四'";
+                $fri_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期五'";
+                $sat_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期六'";
+                $sun_sql = "SELECT * FROM opentime WHERE shop_ID = '$shopID' AND shop_OpenWeek='星期日'";
                 echo "<li>
-                                    <table class='opening-time'>
-                                        <tr>
-                                            <th colspan='2'>營業時間</th>
-                                        </tr>
-                                        <tr>
-                                            <td>星期一</td>
-                                            <td>9:00 - 18:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>星期一</td>
-                                            <td>9:00 - 18:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>星期一</td>
-                                            <td>9:00 - 18:00</td>
-                                        </tr>
-                                    </table>
-                                </li>";
-                echo "</ul>
+                    <table class='opening-time'>
+                        <tr>
+                            <th colspan='2'>營業時間</th>
+                        </tr>";
+                $mon_result = $conn->query($mon_sql);
+                $tue_result = $conn->query($tue_sql);
+                $wed_result = $conn->query($wed_sql);
+                $thr_result = $conn->query($thr_sql);
+                $fri_result = $conn->query($fri_sql);
+                $sat_result = $conn->query($sat_sql);
+                $sun_result = $conn->query($sun_sql);
+                if ($mon_result->num_rows > 0) {
+                    $mon_row = $mon_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期一</td>
+                            <td>".$mon_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($tue_result->num_rows > 0) {
+                    $tue_row = $tue_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期二</td>
+                            <td>".$tue_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($wed_result->num_rows > 0) {
+                    $wed_row = $wed_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期三</td>
+                            <td>".$wed_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($thr_result->num_rows > 0) {
+                    $thr_row = $thr_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期四</td>
+                            <td>".$thr_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($fri_result->num_rows > 0) {
+                    $fri_row = $fri_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期五</td>
+                            <td>".$fri_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($sat_result->num_rows > 0) {
+                    $sat_row = $sat_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期六</td>
+                            <td>".$sat_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                if ($sun_result->num_rows > 0) {
+                    $sun_row = $sun_result->fetch_assoc();
+                    echo "
+                        <tr>
+                            <td>星期日</td>
+                            <td>".$sun_row['shop_OpenTime']."</td>
+                        </tr>";
+                }
+                echo "</table>
+                </li>";
+                
+                    echo "</ul>
                         </div>
                     </div>
                     <ul class='add'>";
