@@ -120,7 +120,17 @@ require_once 'db.php';
                 // 顯示查詢結果
                 echo "<ul class='shop-list'>";
                 if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
+                    $data_nums = mysqli_num_rows($result); //統計總比數
+                    $per = 5; //每頁顯示項目數量
+                    $pages = ceil($data_nums/$per); //取得不小於值的下一個整數
+                    if (!isset($_GET["page"])){ //假如$_GET["page"]未設置
+                        $page=1; //則在此設定起始頁數
+                    } else {
+                        $page = intval($_GET["page"]); //確認頁數只能夠是數值資料
+                    }
+                    $start = ($page-1)*$per; //每一頁開始的資料序號
+                    $result = $conn->query($sql.' LIMIT '.$start.', '.$per) or die("Error: " . $conn->error);
+                while ($row = mysqli_fetch_array ($result)) {
                     $shopID=$row["shop_ID"];
                     $rating_sql="SELECT shop_ID,AVG(com_Rating) AS Rating_avg FROM comment WHERE shop_ID='$shopID' GROUP BY shop_ID";
                     $result_rating=$conn->query($rating_sql);
@@ -162,7 +172,34 @@ require_once 'db.php';
                         exit();
                 }
                 echo "</ul>";
-            
+                //分頁頁碼
+                /*
+                echo '共 '.$data_nums.' 筆-在 '.$page.' 頁-共 '.$pages.' 頁';
+                echo "<br /><a href=?page=1>首頁</a> ";
+                echo "第 ";
+                for( $i=1 ; $i<=$pages ; $i++ ) {
+                    if ( $page-3 < $i && $i < $page+3 ) {
+                        echo "<a href=?page=".$i.">".$i."</a> ";
+                    }
+                } 
+                echo " 頁 <a href=?page=".$pages.">末頁</a><br /><br />";
+                */
+
+                // Pagination
+                echo '<div class="pagination">';
+                echo "<a href='?page=1'><</a>";
+                for ($i = 1; $i <= $pages; $i++) {
+                    if ($page - 3 < $i && $i < $page + 3) {
+                        if ($i == $page) {
+                            echo "<a class='active' href='?page=".$i."'>".$i."</a> ";
+                        } else {
+                            echo "<a href='?page=".$i."'>".$i."</a> ";
+                        }
+                    }
+                }
+                echo "<a href='?page=".$pages."'>></a><br /><br />";
+                echo '</div>';
+
             // 關閉資料庫連接
             $conn->close();
             ?>
