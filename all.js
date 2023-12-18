@@ -15,11 +15,13 @@ $(document).ready(function(){
   });
 
   $("#no-visited-input").click(function(){
-    $("#no-visited-label").toggleClass("no-visited-active");
+    $("#no-visited-label").css("background-color","gray");
+    $("#no-visited-label").css("color","white");
   })
 
   $("#four-star-input").click(function(){
-    $("#four-star-label").toggleClass("four-star-active");
+    $("#four-star-label").css("background-color","gray");
+    $("#four-star-label").css("color","white");
   })
 
   $(".dessert_tab li").click(function(){
@@ -103,12 +105,21 @@ function deletionFavorite(shopID){
   }
 }
 
-function deletionUser(userID){
+// function deletionUser(userID){
+//   console.log('hi');
+//   if (confirm("確定要刪除帳號嗎？")) {
+//     window.location.href = "delete_userinfo.php?user_id=" + userID;
+//   } else {
+//     window.location.href = "user_info.php?user_id=" + userID;
+//   }
+// }
+
+function deletionShop(shopID){
   console.log('hi');
-  if (confirm("確定要刪除帳號嗎？")) {
-    window.location.href = "delete_userinfo.php?user_id=" + userID;
+  if (confirm("確定要刪除此店家嗎？")) {
+    window.location.href = "delete_shop.php?id=" + shopID;
   } else {
-    window.location.href = "user_info.php?user_id=" + userID;
+    window.location.href = "manager_index.php";
   }
 }
 

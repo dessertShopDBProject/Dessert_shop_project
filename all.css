@@ -214,10 +214,6 @@ img{
     border:none;
     border-radius:5px;
 }
-.no-visited-active,.four-star-active{
-    background:gray !important;
-    color:white !important;
-}
 #no-visited-label{
     width:120px;
 }
@@ -236,6 +232,20 @@ img{
     cursor: pointer;
     background-color:#F60099;
 }
+
+.delete-button{
+    border:0px;
+    background-color: #FF3E3E;
+    color:white;
+    padding:10px;
+    border-radius: 5px;
+    margin-left:10px;
+}
+.delete-button:hover{
+    cursor: pointer;
+    background-color:#bd1010bf;
+}
+
 
 .style a{
     width:200px;
@@ -667,7 +677,7 @@ img{
 }
 .shop-list li{
     display: flex;
-    justify-content:space-between;
+    justify-content: flex-start;
     border:2px solid #F591B3;
     border-radius:10px;
     padding:10px;
@@ -676,26 +686,13 @@ img{
 .shop-list img{
     width:300px;
 }
-.shop-list>li>div{
-    display: flex;
-    justify-content: flex-start;
-}
 .shop-list-content{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    margin-left: 50px;
+    justify-content: space-around;
+    margin-left:10px;
 }
-.shop-list-content h2{
-    font-weight: bolder;
-    color:#5B2B1E;
-    font-size:25px;
-}
-.shop-list>li>p{
-    float:right;
-    font-size: 25px;
-    font-weight: bolder;
-}
+
 .name-and-comment{
     display: flex;
     justify-content: space-between;
@@ -835,14 +832,13 @@ img{
 .favorite-shop-detail{
     padding:20px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 .favorite-shop-detail img{
-    width:30%;
-    border:1px solid black;
+    width:80%;
 }
 .favorite-shop-content{
-    margin-left:50px;
+    margin-left:20px;
 }
 .favorite-shop-content p{
     margin-top:10px;
@@ -854,16 +850,13 @@ img{
     padding:10px;
     border-radius: 3px;
     color:#5B2B1E;
+    width:15%;
     margin-top:20px;
 }
 .favorite-shop-content .heart:hover{
     background-color: #A68F7B;
     color:#5B2B1E;
     cursor: pointer;
-}
-.favorite-shop-content a{
-    text-decoration: none;
-    color:#5B2B1E;
 }
 /*sign-up and login*/
 .signup,.login{
@@ -948,6 +941,25 @@ img{
     color: #5B2B1E;
     font-weight: bold;
 }
+input[type="radio"] {
+    align-self: flex-start;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+/* 甜點店修改用的 */
+/* .adjust-user-main input[type="radio"] {
+    align-self: flex-start;
+    flex-direction: row;
+    justify-content: flex-start;
+    vertical-align: middle; 調整垂直對齊方式
+    display: flex; 讓 input 元素內容水平排列
+     align-items: center; 水平居中對齊
+}
+.adjust-user-main p{
+    align-self: flex-start;
+    flex-direction: row;
+    justify-content: flex-start;
+} */
 .user-update{
     background-color: #F2A7AD;
     color:#F2F2F0;
@@ -987,25 +999,4 @@ img{
 }
 .dessert_tab_active{
     border-bottom:3px solid pink !important;
-}
-
-/*pagination*/
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.pagination a {
-    display: inline-block;
-    padding: 8px 16px;
-    text-decoration: none;
-    color:gray;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    margin: 0 4px;
-}
-
-.pagination a.active{
-    background-color: #555;
-    color: white;
 }

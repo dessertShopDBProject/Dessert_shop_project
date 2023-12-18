@@ -126,7 +126,7 @@ require_once('db.php'); // 引入資料庫連線
         }
         ?>
         <div class="adjust-user-main">
-            <h2>新增店家</h2>
+            <h2>修改店家資訊</h2>
             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <label for="shop_ID">店家ID(不可更改)</label>
                 <input type="text" id="shop_ID" name="shop_ID" value="<?php echo $shop_ID; ?>" readonly>
@@ -144,9 +144,10 @@ require_once('db.php'); // 引入資料庫連線
                 <input type="email" id="newshop_Email" name="newshop_Email" value="<?php echo $shop_Email; ?>">
                 <label for="newshop_Address">地址</label>
                 <input type="text" id="newshop_Address" name="newshop_Address" value="<?php echo $shop_Address; ?>" required>
-                <label for="newshop_ForHere">內用/外帶(預設內用)</label>
-                <input type="radio" id="newshop_ForHere_1" name="newshop_ForHere" value="1" <?php if($shop_ForHere=='1'){echo "checked";} ?>>內用
-                <input type="radio" id="newshop_ForHere_0" name="newshop_ForHere" value="0"<?php if($shop_ForHere=='0'){echo "checked";} ?>>外帶
+                <!-- <label for="newshop_ForHere">內用/外帶(預設內用)</label> -->
+                <p><input type="radio" id="newshop_ForHere_1" name="newshop_ForHere" value="1" <?php if($shop_ForHere=='1'){echo "checked";} ?>>內用</p>
+                <p><input type="radio" id="newshop_ForHere_0" name="newshop_ForHere" value="0"<?php if($shop_ForHere=='0'){echo "checked";} ?>>外帶</p>
+                
                 <!-- 照片 -->
                 <button type="submit" class="user-update">送出</button>
             </form>

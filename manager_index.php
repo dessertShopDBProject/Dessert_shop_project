@@ -80,9 +80,10 @@ require_once 'db.php';
             </ul>
         </div>
         <div class="main">
+            <div class='shop-list'>
             <?php
             // 列出所有店家
-            echo "<br><p>店家總覽 <a href='create_shop.php'><button>新增店家</button></a></p><br>";
+            echo "<br><h1>店家總覽 <a href='create_shop.php'><button class='search-button'>新增店家</button></a></h1><hr style='border: 2px dashed #5B2B1E;'><br>";
             $sql = "SELECT shop_ID, shop_Name FROM shop";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
@@ -92,8 +93,8 @@ require_once 'db.php';
                     echo "<tr>";
                     echo "<td>" . $row["shop_ID"] . "</td>";
                     echo "<td>" . $row["shop_Name"] . "</td>";
-                    echo "<td><a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><button>查看</button></a></td>";
-                    echo "<td><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><button>修改</button></a></td>";
+                    echo "<td><a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看</button></a></td>";
+                    echo "<td><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >修改</button></a></td>";
                     $delete_ID = $row["shop_ID"];
                     echo "<script>function deletionShop(shopID){
                         console.log('hi');
@@ -103,8 +104,9 @@ require_once 'db.php';
                           window.location.href = 'manager_index.php';
                         }
                       }</script>";
-                    echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\">刪除</button></td>";
+                    echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\" class='delete-button' >刪除</button></td>";
                     // echo "<td><button type='submit' onclick='deletionShop($delete_ID)'>刪除2</button></td>";
+                    echo "<td><a href='manager_dessert_index.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看/管理該店家甜點</button></a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
@@ -114,6 +116,7 @@ require_once 'db.php';
 
             $conn->close();
             ?>
+            </div>
         </div>
     </div>
     <div class="footer">

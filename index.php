@@ -27,11 +27,11 @@ require_once 'db.php';
                     echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
                 }
                 ?>
-                <form action="select.php" method="GET" class="search-section">
+                <form action="index-select.php" method="GET" class="search-section">
                     <input type="button" name="zone-choice" id="index-zone-choice" value="選擇地區">
                     <ul class="zone-choice-dropdown">
-                        <li><a href="select.php?zone-choice=中壢區">中壢區</a></li>
-                        <li><a href="select.php?zone-choice=桃園區">桃園區</a></li>
+                        <li><a href="index-select.php?zone=中壢區">中壢區</a></li>
+                        <li><a href="index-select.php?zone=桃園區">桃園區</a></li>
                     </ul>
                     <input type="button" name="style-choice" id="index-style-choice" value="選擇種類">
                     <ul class="style-choice-dropdown">
@@ -41,7 +41,7 @@ require_once 'db.php';
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 // Shop is visited
-                                echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?style-choice=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
+                                echo "<li class='style' name='dess-type' id='dess-type'><a href='index-select.php?type=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
                             }
                         }
                         ?>

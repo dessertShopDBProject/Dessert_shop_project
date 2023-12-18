@@ -22,11 +22,12 @@ $numRows = mysqli_num_rows($result);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $favoriteResult .= "<li class='favorite-shop-detail'>
-        <img src='#' alt='".$row['shop_Name']."'>
+        <img src='#' alt=''>
         <div class='favorite-shop-content'>
             <h2><a href='shop_info.php?shop_id=".$row["shop_ID"]."'>".$row["shop_Name"]."</a></h2>
-            <p><i class='fas fa-map-marker-alt' style='color: #ea0b43;margin-right:10px;'></i>".$row["shop_Address"]."</p>
-            <p><i class='fa-solid fa-phone' style='color: #21e448;margin-right:10px;'></i>".$row["shop_Phone"]."</p>
+            <p><i class='fas fa-map-marker-alt' style='color: #ea0b43;'></i>".$row["shop_Address"]."</p>
+            <p><i class='fa-solid fa-phone' style='color: #21e448;'></i>".$row["shop_Phone"]."</p>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi enim dignissimos beatae optio officiis ratione, dolore tempora. A non deserunt modi necessitatibus asperiores ipsum explicabo? Tempore voluptatem eligendi sed harum?</p>
             <div class='heart'>
                 <i class='fa-solid fa-heart' style='color: #f10937;'></i>&nbsp;已收藏
             </div>
