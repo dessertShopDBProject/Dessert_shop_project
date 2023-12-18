@@ -15,13 +15,11 @@ $(document).ready(function(){
   });
 
   $("#no-visited-input").click(function(){
-    $("#no-visited-label").css("background-color","gray");
-    $("#no-visited-label").css("color","white");
+    $("#no-visited-label").toggleClass("no-visited-active");
   })
 
   $("#four-star-input").click(function(){
-    $("#four-star-label").css("background-color","gray");
-    $("#four-star-label").css("color","white");
+    $("#four-star-label").toggleClass("four-star-active");
   })
 
   $(".dessert_tab li").click(function(){
@@ -111,15 +109,6 @@ function deletionUser(userID){
     window.location.href = "delete_userinfo.php?user_id=" + userID;
   } else {
     window.location.href = "user_info.php?user_id=" + userID;
-  }
-}
-
-function deletionShop(shopID){
-  console.log('hi');
-  if (confirm("確定要刪除此店家嗎？")) {
-    window.location.href = "delete_shop.php?id=" + shopID;
-  } else {
-    window.location.href = "manager_index.php";
   }
 }
 

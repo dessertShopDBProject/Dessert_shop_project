@@ -128,7 +128,8 @@ require_once 'db.php';
                     $shopName= $row["shop_Name"];
                     echo"
                         <li>
-                        <img src='#' alt=$shopName>
+                        <div>
+                        <img src='./image/dessert.jpg' alt=$shopName>
                         <div class='shop-list-content'>
                                 <h2>$shopName</h2>";
                             echo "
@@ -148,11 +149,11 @@ require_once 'db.php';
                             }    
                             echo "</p>
                             <a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><input type='submit' value='查看詳細資訊' name='shop-detail-button' class='shop-detail-button'></a>
-                        </div>
+                        </div></div>
                         <p>";
                         if($result_rating->num_rows > 0) {
                             $row_rating = $result_rating->fetch_assoc();
-                            echo round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star'></i>";
+                            echo round($row_rating['Rating_avg'],1). "<i class='fa-solid fa-star' style='color:#ffd250;'></i>";
                         };
                         echo "</p></li>";
                     }
