@@ -23,8 +23,7 @@ require_once 'db.php';
             <?php
             if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
                 echo "<h1 class='logo'><a href='manager_index.php'>搜蒐甜點店</a></h1>";
-            }
-            else{
+            } else {
                 echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
             }
             ?>
@@ -81,43 +80,44 @@ require_once 'db.php';
         </div>
         <div class="main">
             <div class='shop-list'>
-            <?php
-            // 列出所有店家
-            echo "<br><h2 class='dessert-title'>店家總覽 <a href='create_shop.php'><button class='search-button'>新增店家</button></a></h2><hr style='border: 2px dashed #5B2B1E;'><br>";
-            $sql = "SELECT shop_ID, shop_Name FROM shop";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                // 顯示資料表格
-                echo "<table><tr><th>店家ID</th><th>店家名稱</th><th> </th></tr>";
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["shop_ID"] . "</td>";
-                    echo "<td>" . $row["shop_Name"] . "</td>";
-                    echo "<td><a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看</button></a></td>";
-                    echo "<td><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >修改</button></a></td>";
-                    $delete_ID = $row["shop_ID"];
-                    // echo "<script>function deletionShop(shopID){
-                    //     console.log('hi');
-                    //     if (confirm('確定要刪除此店家嗎？')) {
-                    //       window.location.href = 'delete_shop.php?id=' + shopID;
-                    //     } else {
-                    //       window.location.href = 'manager_index.php';
-                    //     }
-                    //   }</script>";
-                    echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\" class='delete-button' >刪除</button></td>";
-                    // echo "<td><button type='submit' onclick='deletionShop($delete_ID)'>刪除2</button></td>";
-                    echo "<td><a href='manager_dessert_index.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看/管理該店家甜點</button></a></td>";
-                    echo "</tr>";
+                <?php
+                // 列出所有甜點
+                $shopID = isset($_GET['shop_id']) ? $_GET['shop_id'] : '';
+                $sql = "SELECT shop_Name FROM shop WHERE shop_ID='$shopID'";
+                $name_result = $conn->query($sql);
+                $name = $name_result->fetch_assoc();
+                echo "<h2 class='dessert-title' id='dessert-title'>" . $name["shop_Name"] . "的甜點</h2><hr style='border: 2px dashed #5B2B1E;'><br>";
+                $sql = "SELECT d.shop_ID, d.dess_ID, d.dess_Name, d.dess_Price, dt.desstype_Name
+            FROM dessert d
+            JOIN desstype dt ON d.desstype_ID = dt.desstype_ID
+            WHERE d.shop_ID = '$shopID'
+            ORDER BY d.dess_ID";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    // 顯示資料表格
+                    echo "<table><tr><th>ID</th><th>名稱</th><th>價格</th><th>類型</th><th> </th></tr>";
+                    while ($row = $result->fetch_assoc()) {
+                        $changed_shop_ID = $row["shop_ID"];
+                        $changed_dess_ID = $row["dess_ID"];
+                        echo "<tr id='row_{$changed_shop_ID}_{$changed_dess_ID}'>";
+                        echo "<td>" . $row["dess_ID"] . "</td>";
+                        echo "<td class='text-element'>" . $row["dess_Name"] . "</td>";
+                        echo "<td class='text-element'>" . $row["dess_Price"] . "</td>";
+                        echo "<td class='text-element'>" . $row["desstype_Name"] . "</td>";
+                        echo "<td><button class='search-button modify-button' onclick=\"modifyRow('$changed_shop_ID', '$changed_dess_ID')\">修改</button></td>";
+                        echo "<td><button type='submit' onclick=\"deletionDess('$changed_shop_ID','$changed_dess_ID')\" class='delete-button'>刪除</button></td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                } else {
+                    echo "0 筆結果";
                 }
-                echo "</table>";
-            } else {
-                echo "0 筆結果";
-            }
 
-            $conn->close();
-            ?>
+                $conn->close();
+                ?>
             </div>
         </div>
+    </div>
     </div>
     <div class="footer">
         <div class="left-footer"><img src='../image/logo-4.png'></div>
