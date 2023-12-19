@@ -28,11 +28,11 @@ require_once 'db.php';
                 echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
             }
             ?>
-            <form action="index-select.php" method="GET" class="search-section">
+            <form action="select.php" method="GET" class="search-section">
                 <input type="button" name="zone-choice" id="index-zone-choice" value="選擇地區">
                 <ul class="zone-choice-dropdown">
-                    <li><a href="index-select.php?zone=中壢區">中壢區</a></li>
-                    <li><a href="index-select.php?zone=桃園區">桃園區</a></li>
+                    <li><a href="select.php?zone-choice=中壢區">中壢區</a></li>
+                    <li><a href="select.php?zone-choice=桃園區">桃園區</a></li>
                 </ul>
                 <input type="button" name="style-choice" id="index-style-choice" value="選擇種類">
                 <ul class="style-choice-dropdown">
@@ -42,7 +42,7 @@ require_once 'db.php';
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             // Shop is visited
-                            echo "<li class='style' name='dess-type' id='dess-type'><a href='index-select.php?type=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
+                            echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?style-choice=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
                         }
                     }
                     ?>
@@ -65,7 +65,7 @@ require_once 'db.php';
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理<br>店家</a></li>';
+                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
                     }
                     echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
                     echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
@@ -79,44 +79,64 @@ require_once 'db.php';
                 ?>
             </ul>
         </div>
-        <div class="main">
-            <div class='shop-list'>
+        <div class="manager-main">
             <?php
             // 列出所有店家
-            echo "<br><h2 class='dessert-title'>店家總覽 <a href='create_shop.php'><button class='search-button'>新增店家</button></a></h2><hr style='border: 2px dashed #5B2B1E;'><br>";
+            echo "<p>店家總覽 <a href='create_shop.php'><button>新增店家</button></a></p>";
             $sql = "SELECT shop_ID, shop_Name FROM shop";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
+                $data_nums = mysqli_num_rows($result); //統計總比數
+                $per = 10; //每頁顯示項目數量
+                $pages = ceil($data_nums/$per); //取得不小於值的下一個整數
+                if (!isset($_GET["page"])){ //假如$_GET["page"]未設置
+                    $page=1; //則在此設定起始頁數
+                } else {
+                    $page = intval($_GET["page"]); //確認頁數只能夠是數值資料
+                }
+                $start = ($page-1)*$per; //每一頁開始的資料序號
+                $result = $conn->query($sql.' LIMIT '.$start.', '.$per) or die("Error: " . $conn->error);
                 // 顯示資料表格
                 echo "<table><tr><th>店家ID</th><th>店家名稱</th><th> </th></tr>";
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . $row["shop_ID"] . "</td>";
                     echo "<td>" . $row["shop_Name"] . "</td>";
-                    echo "<td><a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看</button></a></td>";
-                    echo "<td><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >修改</button></a></td>";
+                    echo "<td><a href='shop_info.php?shop_id=" . $row["shop_ID"] . "'><button>查看</button></a></td>";
+                    echo "<td><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><button>修改</button></a></td>";
                     $delete_ID = $row["shop_ID"];
-                    // echo "<script>function deletionShop(shopID){
-                    //     console.log('hi');
-                    //     if (confirm('確定要刪除此店家嗎？')) {
-                    //       window.location.href = 'delete_shop.php?id=' + shopID;
-                    //     } else {
-                    //       window.location.href = 'manager_index.php';
-                    //     }
-                    //   }</script>";
-                    echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\" class='delete-button' >刪除</button></td>";
+                    echo "<script>function deletionShop(shopID){
+                        console.log('hi');
+                        if (confirm('確定要刪除此店家嗎？')) {
+                          window.location.href = 'delete_shop.php?id=' + shopID;
+                        } else {
+                          window.location.href = 'manager_index.php';
+                        }
+                      }</script>";
+                    echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\">刪除</button></td>";
                     // echo "<td><button type='submit' onclick='deletionShop($delete_ID)'>刪除2</button></td>";
-                    echo "<td><a href='manager_dessert_index.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看/管理該店家甜點</button></a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
             } else {
                 echo "0 筆結果";
             }
-
+            // Pagination
+            echo '<div class="pagination">';
+            echo "<a href='?page=1'><</a>";
+            for ($i = 1; $i <= $pages; $i++) {
+                if ($page - 3 < $i && $i < $page + 3) {
+                    if ($i == $page) {
+                        echo "<a class='active' href='?page=".$i."'>".$i."</a> ";
+                    } else {
+                        echo "<a href='?page=".$i."'>".$i."</a> ";
+                    }
+                }
+            }
+            echo "<a href='?page=".$pages."'>></a><br /><br />";
+            echo '</div>';
             $conn->close();
             ?>
-            </div>
         </div>
     </div>
     <div class="footer">

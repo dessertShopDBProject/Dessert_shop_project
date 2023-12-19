@@ -138,6 +138,8 @@ body{
 }
 .manager-main table th{
     font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
 }
 .manager-main>p{
     font-weight: bolder;
@@ -151,7 +153,7 @@ body{
 .manager-main button{
     padding:10px 20px;
     border: none;
-    background-color: #D9C6B0;
+    background-color:transparent;
     color:#5B2B1E;
     border-radius: 5px;
 }
@@ -159,6 +161,9 @@ body{
     cursor: pointer;
     background-color:#ddd;
     color:#5B2B1E;
+}
+.manager-main tr{
+    border-bottom:1px solid lightgray;
 }
 img{
     height:200px;
@@ -964,14 +969,14 @@ img{
     cursor: pointer;
 }
 /*adjust user info*/
-.adjust-user-main{
+.adjust-user-main,.adjust-shop-main{
     width:60%;
     margin:50px auto;
     border:1px lightpink solid;
     border-radius: 1px;
     padding:10px;
 }
-.adjust-user-main form{
+.adjust-user-main form,.adjust-shop-main form{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -982,7 +987,7 @@ img{
     color:#594347;
     font-size: small;
 }
-.adjust-user-main input{
+.adjust-user-main input,.adjust-shop-main input{
     margin-bottom: 30px;
     margin-top:10px;
     padding:10px 0px;
@@ -994,26 +999,16 @@ img{
     font-weight: bold;
 }
 
-input[type="radio"] {
-    align-self: flex-start;
-    flex-direction: row;
-    justify-content: flex-start;
-}
 /* 甜點店修改用的 */
-.adjust-user-main input[type="radio"] {
-    align-self: flex-start;
-    flex-direction: row;
+.adjust-shop-main div{
+    display: flex;
     justify-content: flex-start;
-    vertical-align: middle; /*調整垂直對齊方式*/
-    display: flex; /*讓 input 元素內容水平排列*/
-     align-items: center; /*水平居中對齊*/
+    align-items: center;
 }
-.adjust-user-main p{
-    align-self: flex-start;
-    flex-direction: row;
-    justify-content: flex-start;
-} 
-
+.adjust-shop-main div label{
+    width:70px;
+    margin-top:-20px;
+}
 .user-update{
     background-color: #F2A7AD;
     color:#F2F2F0;

@@ -87,7 +87,7 @@ require_once 'process_comment.php';
                                     echo "<li><a href='" . $row['shop_IG'] . "'><i class='fa-brands fa-instagram' style='color: #fd12e1;' margin-right:10px;></i></a></li>";
                                 }
                                 if ($row["shop_Website"] != "") {
-                                    echo "<li><a href='" . $row['shop_Website'] . "'><i class='fa-solid fa-globe' style='margin-right:10px;'></i></a></li>";
+                                    echo "<li><a href='" . $row['shop_Website'] . "'><i class='fa-solid fa-globe' style='margin-right:10px;margin-left:10px;'></i></a></li>";
                                 }
                                 echo "</li></ul></div>";
                         echo "</div>";
