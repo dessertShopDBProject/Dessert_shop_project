@@ -119,3 +119,115 @@ function setIndexZone(){
   console.log(indexSelectedZone);
   
 }
+
+function modifyRow(shopID, dessID) {
+  var rowElement = document.getElementById('row_' + shopID + '_' + dessID);
+  var textElements = rowElement.querySelectorAll('.text-element');
+
+  // 創建一個取消按鈕
+  var cancelButton = document.createElement('button');
+  cancelButton.className = 'search-button cancel-button';
+  cancelButton.innerHTML = '取消';
+  cancelButton.onclick = function() {
+    
+    textElements.forEach(function(textElement, index) {
+      var originalTextElement = document.createElement('td');
+      originalTextElement.className = 'text-element';
+      originalTextElement.innerText = textElement.innerText; // 內容保持不變
+      inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+    });
+
+   
+    // 還原 "送出" 按鈕為 "修改" 按鈕
+    modifyButton.innerHTML = '修改';
+    modifyButton.onclick = function() {
+      modifyRow(shopID, dessID);
+    };
+
+    // 移除取消按鈕
+    cancelButton.parentNode.removeChild(cancelButton);
+  };
+
+  // 插入取消按鈕
+  rowElement.appendChild(cancelButton);
+
+  // 創建一個輸入框元素的陣列
+  var inputElements = [];
+
+  // 對每個 text element 創建一個輸入框元素
+  textElements.forEach(function(textElement) {
+    var inputElement = document.createElement('input');
+    inputElement.type = 'text';
+    inputElement.value = textElement.innerText;
+    inputElements.push(inputElement);
+
+    // 創建一個獨立的 <td>，並將輸入框加入其中
+    var tdElement = document.createElement('td');
+    tdElement.className = 'text-element';
+    tdElement.appendChild(inputElement);
+
+    // 替換原本的文字元素
+    textElement.parentNode.replaceChild(tdElement, textElement);
+  });
+
+  // 將 "修改" 按鈕變成 "送出" 按鈕
+  var modifyButton = rowElement.querySelector('.modify-button');
+  modifyButton.innerHTML = '送出';
+  // 按下送出按鈕後
+  modifyButton.onclick = function() {
+
+      // 在這裡執行送出的相應邏輯，例如使用 AJAX 發送到後端
+      var newValues = inputElements.map(function(inputElement) {
+        return inputElement.value;
+      });
+
+    // 使用 AJAX 發送 POST 請求到後端
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'adjust_dess.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        // 在這裡處理後端返回的任何數據或確認消息
+        // console.log(xhr.responseText);
+        console.log('test');
+      }
+    }
+
+    var data = 'shopID=' + encodeURIComponent(shopID) +
+               '&dessID=' + encodeURIComponent(dessID) +
+               '&newValues=' + encodeURIComponent(JSON.stringify(newValues));
+    xhr.send(data);
+
+    // 還原為原本的文字元素
+    // textElements.forEach(function(textElement, index) {
+    //   if (textElement.parentNode.tagName.toLowerCase() === 'td') {
+    //     var originalTextElement = document.createElement('td');
+    //     originalTextElement.className = 'text-element';
+    //     originalTextElement.innerText = newValues[index]; // 內容保持不變
+    //     inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+    //   }
+    //   // var originalTextElement = document.createElement('td');
+    //   // originalTextElement.className = 'text-element';
+    //   // originalTextElement.innerText = newValues[index]; // 內容保持不變
+    //   // inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+    // });
+
+    textElements.forEach(function(textElement, index) {
+      var originalTextElement = document.createElement('td');
+      originalTextElement.className = 'text-element';
+      originalTextElement.innerText = inputElements[index].value; // 內容保持不變
+      inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+    });
+
+
+    // 還原 "送出" 按鈕為 "修改" 按鈕
+    modifyButton.innerHTML = '修改';
+    modifyButton.onclick = function() {
+      modifyRow(shopID, dessID);
+    };
+
+    // 移除取消按鈕
+    cancelButton.parentNode.removeChild(cancelButton);
+  };
+}
+
