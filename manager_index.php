@@ -115,6 +115,7 @@ require_once 'db.php';
                       }</script>";
                     echo "<td><button type='submit' onclick=\"deletionShop('$delete_ID')\">刪除</button></td>";
                     // echo "<td><button type='submit' onclick='deletionShop($delete_ID)'>刪除2</button></td>";
+                    echo "<td><a href='manager_dessert_index.php?shop_id=" . $row["shop_ID"] . "'><button class='search-button' >查看/管理該店家甜點</button></a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
