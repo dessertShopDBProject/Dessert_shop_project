@@ -56,7 +56,7 @@ require_once('db.php'); // 引入資料庫連線
             $newNumber = $lastNumber + 1;
             $newID = 's_' . sprintf('%02d', $newNumber);
         ?>
-        <div class="adjust-user-main">
+        <div class="adjust-shop-main">
             <h2>新增店家</h2>
             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
                 <label for="shop_ID">店家ID(自動配給)</label>
@@ -76,8 +76,10 @@ require_once('db.php'); // 引入資料庫連線
                 <label for="shop_Address">地址</label>
                 <input type="text" id="shop_Address" name="shop_Address" value="" required>
                 <label for="shop_ForHere">內用/外帶(預設內用)</label>
-                <input type="radio" id="shop_ForHere_1" name="shop_ForHere" value="1" checked>內用
-                <input type="radio" id="shop_ForHere_0" name="shop_ForHere" value="0">外帶
+                <div>
+                    <input type="radio" id="shop_ForHere_1" name="shop_ForHere" value="1" checked><label for="newshop_ForHere_1">內用</label>
+                    <input type="radio" id="shop_ForHere_0" name="shop_ForHere" value="0"><label for="newshop_ForHere_0">外帶</label>
+                </div>
                 <!-- 照片 -->
                 <input type="file" name="fileToUpload" id="fileToUpload">
                 <button type="submit" class="user-update">送出</button>
