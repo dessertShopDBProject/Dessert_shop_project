@@ -178,7 +178,7 @@ require_once 'process_comment.php';
                     $result_visited = $conn->query($visited_sql);
                     $row_visited = $result_visited->fetch_assoc();
                     if ($row_favorite != null) {
-                        echo "<li class='favorite-link' data-shopid=$shopID><a href='addToFavorite.php?id=$shopID'><i class='fa-solid fa-heart'></i>收藏</a></li>";
+                    echo "<li class='favorite-link' data-shopid=$shopID><i class='fa-solid fa-heart'></i>收藏</li>";
                     } else if ($row_favorite == null) {
                         echo "<li class='favorite-link' data-shopid=$shopID><a href='addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>";
                     }
