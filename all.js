@@ -123,18 +123,24 @@ function setIndexZone(){
 function modifyRow(shopID, dessID) {
   var rowElement = document.getElementById('row_' + shopID + '_' + dessID);
   var textElements = rowElement.querySelectorAll('.text-element');
+  // var textElements_2 = textElements;
 
   // 創建一個取消按鈕
   var cancelButton = document.createElement('button');
   cancelButton.className = 'search-button cancel-button';
   cancelButton.innerHTML = '取消';
+  //按下'取消'按鈕
   cancelButton.onclick = function() {
+    var rowElement_2 = document.getElementById('row_' + shopID + '_' + dessID);
+    var textElements_2 = rowElement_2.querySelectorAll('.text-element');
     
-    textElements.forEach(function(textElement, index) {
+    textElements_2.forEach(function(textElement,index) {
       var originalTextElement = document.createElement('td');
       originalTextElement.className = 'text-element';
-      originalTextElement.innerText = textElement.innerText; // 內容保持不變
-      inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+      console.log(textElement.innerText);
+      originalTextElement.innerText = ori[index]; // 內容保持不變
+      textElement.parentNode.replaceChild(originalTextElement, textElement);
+
     });
 
    
@@ -153,6 +159,7 @@ function modifyRow(shopID, dessID) {
 
   // 創建一個輸入框元素的陣列
   var inputElements = [];
+  var ori=[];
 
   // 對每個 text element 創建一個輸入框元素
   textElements.forEach(function(textElement) {
@@ -160,6 +167,7 @@ function modifyRow(shopID, dessID) {
     inputElement.type = 'text';
     inputElement.value = textElement.innerText;
     inputElements.push(inputElement);
+    ori.push(inputElement.value);
 
     // 創建一個獨立的 <td>，並將輸入框加入其中
     var tdElement = document.createElement('td');
@@ -197,26 +205,17 @@ function modifyRow(shopID, dessID) {
                '&dessID=' + encodeURIComponent(dessID) +
                '&newValues=' + encodeURIComponent(JSON.stringify(newValues));
     xhr.send(data);
-
-    // 還原為原本的文字元素
-    // textElements.forEach(function(textElement, index) {
-    //   if (textElement.parentNode.tagName.toLowerCase() === 'td') {
-    //     var originalTextElement = document.createElement('td');
-    //     originalTextElement.className = 'text-element';
-    //     originalTextElement.innerText = newValues[index]; // 內容保持不變
-    //     inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
-    //   }
-    //   // var originalTextElement = document.createElement('td');
-    //   // originalTextElement.className = 'text-element';
-    //   // originalTextElement.innerText = newValues[index]; // 內容保持不變
-    //   // inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
-    // });
-
-    textElements.forEach(function(textElement, index) {
+    
+    
+    var rowElement_3 = document.getElementById('row_' + shopID + '_' + dessID);
+    var textElements_3 = rowElement_3.querySelectorAll('.text-element');
+    textElements_3.forEach(function(textElement,index) {
       var originalTextElement = document.createElement('td');
       originalTextElement.className = 'text-element';
+      console.log(textElement.innerText);
       originalTextElement.innerText = inputElements[index].value; // 內容保持不變
-      inputElements[index].parentNode.replaceChild(originalTextElement, inputElements[index]);
+      textElement.parentNode.replaceChild(originalTextElement, textElement);
+
     });
 
 
@@ -230,4 +229,3 @@ function modifyRow(shopID, dessID) {
     cancelButton.parentNode.removeChild(cancelButton);
   };
 }
-
