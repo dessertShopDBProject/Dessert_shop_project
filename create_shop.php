@@ -29,7 +29,7 @@ require_once('db.php'); // 引入資料庫連線
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理<br>店家</a></li>';
+                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
                     }
                     echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
                     echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
@@ -45,57 +45,20 @@ require_once('db.php'); // 引入資料庫連線
             </ul>
         </div>
         <?php
-        if (isset($_SESSION["nowUser"]) && !empty($_SESSION["nowUser"]) && $_SESSION['nowUser']['user_Role'] == "manager") {
-            
-            // 檢查表單是否提交
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // 取得表單提交的資料
-                $shop_ID = $_POST["shop_ID"];
-                $shop_Name = $_POST["shop_Name"];
-                $shop_Phone = $_POST["shop_Phone"];
-                $shop_Website = $_POST["shop_Website"];
-                $shop_IG = $_POST["shop_IG"];
-                $shop_FB = $_POST["shop_FB"];
-                $shop_Email = $_POST["shop_Email"];
-                $shop_Address = $_POST["shop_Address"];
-                // $shop_ForHere = $_POST["shop_ForHere"];
-                // $shop_ForHere = isset($_POST["shop_ForHere"]) ? $_POST["shop_ForHere"] : null;
-                $shop_ForHere = isset($_POST["shop_ForHere"]) ? intval($_POST["shop_ForHere"]) : NULL;
-                // if (isset($_POST["shop_ForHere"])) {
-                //     $shop_ForHere = $_POST["shop_ForHere"];
-                // }
-                // else{
-                //     $shop_ForHere=NULL;
-                // }
-
-
-                // 新增進資料庫內
-                $insertSql = "INSERT INTO shop(shop_ID, shop_Name, shop_Phone, shop_Website, shop_IG, shop_FB, shop_Email, shop_Address, shop_ForHere) VALUES ('$shop_ID', '$shop_Name', '$shop_Phone', '$shop_Website', '$shop_IG', '$shop_FB', '$shop_Email', '$shop_Address', '$shop_ForHere')";
-
-
-                if ($conn->query($insertSql) === TRUE) {
-                    header("Location: manager_index.php");
-                    exit();
-                } else {
-                    echo "錯誤：" . $conn->error;
-                }
-            }
-        }
-
-        // 從資料庫中獲取最後一個 "shop_ID"
-        $sql = "SELECT shop_ID FROM shop ORDER BY shop_ID DESC LIMIT 1";
-        $result = $conn->query($sql);
-        $lastShopID = $result->fetch_assoc();
-        // 取得結果
-        // $lastShopID = $result->fetchColumn();
-        // 將 "s_" 後的數字提取出來，加1，再組合成新的 "shop_ID"
-        $lastNumber = (int) substr($lastShopID['shop_ID'], 2,2);
-        $newNumber = $lastNumber + 1;
-        $newID = 's_' . sprintf('%02d', $newNumber);
+            // 從資料庫中獲取最後一個 "shop_ID"
+            $sql = "SELECT shop_ID FROM shop ORDER BY shop_ID DESC LIMIT 1";
+            $result = $conn->query($sql);
+            $lastShopID = $result->fetch_assoc();
+            // 取得結果
+            // $lastShopID = $result->fetchColumn();
+            // 將 "s_" 後的數字提取出來，加1，再組合成新的 "shop_ID"
+            $lastNumber = (int) substr($lastShopID['shop_ID'], 2,2);
+            $newNumber = $lastNumber + 1;
+            $newID = 's_' . sprintf('%02d', $newNumber);
         ?>
         <div class="adjust-user-main">
             <h2>新增店家</h2>
-            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
                 <label for="shop_ID">店家ID(自動配給)</label>
                 <input type="text" id="shop_ID" name="shop_ID" value="<?php echo $newID; ?>" readonly>
                 <label for="shop_Name">名稱</label>
@@ -116,6 +79,7 @@ require_once('db.php'); // 引入資料庫連線
                 <input type="radio" id="shop_ForHere_1" name="shop_ForHere" value="1" checked>內用
                 <input type="radio" id="shop_ForHere_0" name="shop_ForHere" value="0">外帶
                 <!-- 照片 -->
+                <input type="file" name="fileToUpload" id="fileToUpload">
                 <button type="submit" class="user-update">送出</button>
             </form>
         </div>
@@ -130,3 +94,80 @@ require_once('db.php'); // 引入資料庫連線
 </body>
 
 </html>
+<?php
+    if (isset($_SESSION["nowUser"]) && !empty($_SESSION["nowUser"]) && $_SESSION['nowUser']['user_Role'] == "manager" &&isset($_FILES["fileToUpload"])) {
+        // 檢查表單是否提交
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // 取得表單提交的資料
+            $shop_ID = $_POST["shop_ID"];
+            $shop_Name = $_POST["shop_Name"];
+            $shop_Phone = $_POST["shop_Phone"];
+            $shop_Website = $_POST["shop_Website"];
+            $shop_IG = $_POST["shop_IG"];
+            $shop_FB = $_POST["shop_FB"];
+            $shop_Email = $_POST["shop_Email"];
+            $shop_Address = $_POST["shop_Address"];
+            $shop_ForHere = isset($_POST["shop_ForHere"]) ? intval($_POST["shop_ForHere"]) : NULL;
+            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+            if($check !== false) {
+                echo "File is an image - " . $check["mime"] . ".";
+                $uploadOk = 1;
+            } else {
+                echo "File is not an image.";
+                $uploadOk = 0;
+            }
+        }
+    }
+?>
+<?php
+
+if(isset($_FILES["fileToUpload"])){
+$target_dir = "./temp/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+//$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+//echo $_FILES['fileToUpload']['tmp_name'];
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+  }
+  
+  // Check file size
+  if ($_FILES["fileToUpload"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+  }
+  
+  // Allow certain file formats
+  if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+  && $imageFileType != "gif" ) {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+  }
+  
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+  // if everything is ok, try to upload file
+  } else {
+    $fileName=$newID;
+    $extension  = pathinfo( $_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION ); 
+    $baseName=$fileName.".".$extension;
+    $destination="./upload/{$baseName}";
+    echo $destination;
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination);
+    
+     // 新增進資料庫內
+     $insertSql = "INSERT INTO shop(shop_ID, shop_Name, shop_Phone, shop_Website, shop_IG, shop_FB, shop_Email, shop_Address, shop_ForHere,shop_Photo) VALUES ('$shop_ID', '$shop_Name', '$shop_Phone', '$shop_Website', '$shop_IG', '$shop_FB', '$shop_Email', '$shop_Address', '$shop_ForHere','$destination')";
+
+
+     if ($conn->query($insertSql) === TRUE) {
+         header("Location: manager_index.php");
+         exit();
+     } else {
+         echo "錯誤：" . $conn->error;
+     }
+}
+}
+
+?>
