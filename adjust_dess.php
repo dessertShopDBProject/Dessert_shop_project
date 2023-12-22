@@ -5,22 +5,18 @@ require_once 'db.php';
 $shopID = $_POST['shopID'];
 $dessID = $_POST['dessID'];
 $newValues = json_decode($_POST['newValues'], true);
-// $newName=$newValues['dess_Name'];
-// $newPrice=$newValues['dess_Price'];
 $newName=$newValues[0];
 $newPrice=$newValues[1];
-// $newName=$_POST['newValues']['dess_Name'];
-// $newPrice=$_POST['newValues']['dess_Price'];
-// $newName=$newValues['dess_Price'];
+$newDessTypeName=$newValues[2];
 
 echo $newName;
 
-// 執行資料庫更新操作，這裡僅為示範，實際操作可能涉及 SQL 語句等
-// $db 為你的資料庫連線對象，這裡假設使用 mysqli
-// 你需要根據你的實際情況進行適當的資料庫更新操作
+$searchTN="SELECT desstype_ID FROM desstype WHERE desstype_Name	='$newDessTypeName'";
+$searchTNResult=$conn->query($searchTN);
+$searchResult=$searchTNResult->fetch_assoc();
+$newDessTypeID=$searchResult["desstype_ID"];
 
-// 假設你的資料表為 dess_table，你需要替換為實際的表名
-$sql = "UPDATE dessert SET dess_Name='$newName', dess_Price='$newPrice' WHERE shop_ID='$shopID' AND dess_ID='$dessID'";
+$sql = "UPDATE dessert SET dess_Name='$newName', dess_Price='$newPrice',desstype_ID='$newDessTypeID' WHERE shop_ID='$shopID' AND dess_ID='$dessID'";
 $rsult = $conn->query($sql);
 if ($conn->query($sql) == TRUE) {
     echo "succes";
@@ -31,8 +27,6 @@ else
 {
     echo "錯誤：" . $conn->error;
 }
-// $stmt->bind_param('ssss', $newValues['dess_Name'], $newValues['dess_Price'], $shopID, $dessID);
-// $stmt->execute();
 
 // 關閉資料庫連線
 $conn->close();

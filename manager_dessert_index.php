@@ -95,7 +95,7 @@ require_once 'db.php';
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     // 顯示資料表格
-                    echo "<table><tr><th>ID</th><th>名稱</th><th>價格</th><th>類型</th><th> </th></tr>";
+                    echo "<table id='dessert-table'><tr><th>ID</th><th>名稱</th><th>價格</th><th>類型</th><th> </th></tr>";
                     while ($row = $result->fetch_assoc()) {
                         $changed_shop_ID = $row["shop_ID"];
                         $changed_dess_ID = $row["dess_ID"];
@@ -109,6 +109,7 @@ require_once 'db.php';
                         echo "</tr>";
                     }
                     echo "</table>";
+                    echo "<button onclick=\"addRow('$shopID')\">新增</button>";
                 } else {
                     echo "0 筆結果";
                 }
