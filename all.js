@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
   var storedSelectedType = localStorage.getItem("selectedType");
   if (storedSelectedType) {
@@ -32,6 +31,27 @@ $(document).ready(function(){
   })
   
 });
+
+/*opentime switch*/
+// 获取开关和显示状态的元素
+const toggles = document.querySelectorAll('.toggle');
+
+// 遍歷 NodeList，為每個開關設置事件監聽器
+toggles.forEach(function(toggle) {
+  const day = toggle.id.split('-')[0];
+  const status = document.querySelector('#' + day + '-open-status');
+
+  // 設置事件監聽器
+  toggle.addEventListener('change', function() {
+    // 根據開關的狀態更新相應的 <span> 元素的內容
+    if (toggle.checked) {
+      status.textContent = '今日有營業';
+    } else {
+      status.textContent = '未營業';
+    }
+  });
+});
+
 
 function openCommentForm() {
   document.getElementById('commentFormOverlay').style.display = 'flex';
