@@ -158,6 +158,39 @@ function setIndexZone(){
   
 }
 
+var selectElement;
+
+function getType(callback,oriType) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'select_type.php', true);
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      // 在這裡處理從後端返回的 desstype_ID 和 desstype_Name 列表
+      var responseData = JSON.parse(xhr.responseText);
+      // 將資料傳遞給回調函數
+      callback(responseData,oriType);
+    }
+  };
+
+  xhr.send();
+}
+
+function handleDesstypeOptions(desstypeOptions,oriType) {
+  // 添加 desstype 选项到下拉框
+  desstypeOptions.forEach(function(option) {
+    var optionElement = document.createElement('option');
+    optionElement.value = option['desstype_ID'];
+    optionElement.innerText = option['desstype_Name'];
+    selectElement.appendChild(optionElement);
+    // console.log(option['desstype_Name']);
+    if (oriType === option['desstype_Name']) {
+      optionElement.selected = true;
+      // console.log("find");
+    }
+  });
+}
+
 function modifyRow(shopID, dessID) {
   var rowElement = document.getElementById('row_' + shopID + '_' + dessID);
   var textElements = rowElement.querySelectorAll('.text-element');
@@ -175,8 +208,15 @@ function modifyRow(shopID, dessID) {
     textElements_2.forEach(function(textElement,index) {
       var originalTextElement = document.createElement('td');
       originalTextElement.className = 'text-element';
-      console.log(textElement.innerText);
-      originalTextElement.innerText = ori[index]; // 內容保持不變
+      // console.log(textElement.innerText);
+      if (index === 2) { // 如果是下拉選單的列
+        // console.log(oriT);
+        // originalTextElement.innerText = selectElement.options[selectElement.selectedIndex].innerText;
+        originalTextElement.innerText=oriT;
+    } else {
+        originalTextElement.innerText = ori[index]; // 內容保持不變
+    }
+      // originalTextElement.innerText = ori[index]; // 內容保持不變
       textElement.parentNode.replaceChild(originalTextElement, textElement);
 
     });
@@ -198,33 +238,60 @@ function modifyRow(shopID, dessID) {
   // 創建一個輸入框元素的陣列
   var inputElements = [];
   var ori=[];
+  var oriT;
+  
+  textElements.forEach(function (textElement, index) {
+    var inputElement;
+  
+    if (index === 2) { // 這是 desstype_Name 的索引，對應到你的 PHP 代碼中的 "desstype_Name"
+      selectElement = document.createElement('select'); // 移除 var 以便該變數在外部可見
+      selectElement.className = 'text-element';
+      oriT=textElement.innerText;
+      getType(handleDesstypeOptions,textElement.innerText);
 
-  // 對每個 text element 創建一個輸入框元素
-  textElements.forEach(function(textElement) {
-    var inputElement = document.createElement('input');
-    inputElement.type = 'text';
-    inputElement.value = textElement.innerText;
-    inputElements.push(inputElement);
-    ori.push(inputElement.value);
-
-    // 創建一個獨立的 <td>，並將輸入框加入其中
+      
+      inputElement = selectElement;
+      ori.push(selectElement.value);
+    } else {
+      inputElement = document.createElement('input');
+      inputElement.type = 'text';
+      inputElement.value = textElement.innerText;
+      ori.push(inputElement.value);
+    }
+  
+    // 創建一個獨立的 <td>，並將輸入框或下拉框加入其中
     var tdElement = document.createElement('td');
     tdElement.className = 'text-element';
     tdElement.appendChild(inputElement);
-
+  
     // 替換原本的文字元素
     textElement.parentNode.replaceChild(tdElement, textElement);
+  
+    // 將 inputElement 加入 inputElements 陣列
+    inputElements.push(inputElement);
   });
+  
+  console.log(inputElements);
+  console.log(ori);
+
+
 
   // 將 "修改" 按鈕變成 "送出" 按鈕
   var modifyButton = rowElement.querySelector('.modify-button');
   modifyButton.innerHTML = '送出';
   // 按下送出按鈕後
   modifyButton.onclick = function() {
-
+// console.log(inputElements.length); ->3
       // 在這裡執行送出的相應邏輯，例如使用 AJAX 發送到後端
-      var newValues = inputElements.map(function(inputElement) {
-        return inputElement.value;
+      var newValues = inputElements.map(function(inputElement,index) {
+        if(index===2){
+          // console.log(inputElement.options[inputElement.selectedIndex].innerText);
+          return inputElement.options[inputElement.selectedIndex].innerText;
+        }
+        else{
+          return inputElement.value;
+        }
+        
       });
 
     // 使用 AJAX 發送 POST 請求到後端
@@ -250,8 +317,26 @@ function modifyRow(shopID, dessID) {
     textElements_3.forEach(function(textElement,index) {
       var originalTextElement = document.createElement('td');
       originalTextElement.className = 'text-element';
-      console.log(textElement.innerText);
-      originalTextElement.innerText = inputElements[index].value; // 內容保持不變
+      if (inputElements[index]) {
+        if (index === 2) { // 如果是下拉選單的列
+            console.log(oriT);
+            originalTextElement.innerText = inputElements[index].options[inputElements[index].selectedIndex].innerText;
+        } else {
+            originalTextElement.innerText = inputElements[index].value; // 內容保持不變
+        }
+    } else {
+        console.error('Input element at index ' + index + ' is undefined or does not exist.');
+        // 如果元素不存在，您可以設定一個預設值或執行其他處理邏輯
+    }
+      // console.log(textElement.innerText);
+    //   if (index === 2) { // 如果是下拉選單的列
+    //     console.log(selectElement.options[selectElement.selectedIndex].innerText);
+    //     originalTextElement.innerText = selectElement.options[selectElement.selectedIndex].innerText;
+    //     // originalTextElement.innerText=oriT;
+    // } else {
+    //   originalTextElement.innerText = inputElements[index].value; // 內容保持不變
+    // }
+      // originalTextElement.innerText = inputElements[index].value; // 內容保持不變
       textElement.parentNode.replaceChild(originalTextElement, textElement);
 
     });
@@ -267,3 +352,107 @@ function modifyRow(shopID, dessID) {
     cancelButton.parentNode.removeChild(cancelButton);
   };
 }
+
+
+function addRow(shopID) {
+  // 獲取表格
+  var table = document.getElementById('dessert-table');
+  // 獲取最后一行第一个 <td> 的值
+  var lastRow = table.rows[table.rows.length - 1];
+  if (lastRow.cells[0].querySelector('input')) {
+    var firstCellValue = lastRow.cells[0].querySelector('input').value;
+  } 
+  else {
+    var firstCellValue = lastRow.cells[0].innerText;
+  }
+  var lastNumber = parseInt(firstCellValue.substr(2, 2), 10);
+  var newNumber = lastNumber + 1;
+  var newID = 'd_' + ('00' + newNumber).slice(-2);
+  
+  
+
+  // 創建新行
+  var newRow = table.insertRow(-1);
+  newRow.id = 'row_'+shopID+'_' + newID;
+
+  //自動配給ID
+  var cell = newRow.insertCell(0);
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.readOnly=true;
+  input.value=newID;
+  cell.appendChild(input);
+
+  // 建立單元格，並為每個單元格添加一個空白的文字框
+  for (var i = 1; i < 4; i++) {
+      var cell = newRow.insertCell(i);
+      var input = document.createElement('input');
+      input.type = 'text';
+      cell.appendChild(input);
+  }
+
+  // 建立「送出」和「刪除」按鈕
+  var modifyCell = newRow.insertCell(4);
+  var modifyButton = document.createElement('button');
+  modifyButton.className = 'search-button modify-button';
+  modifyButton.innerText = '送出';
+  modifyCell.appendChild(modifyButton);
+  //按下送出
+// 添加送出按鈕的點擊事件處理程序
+modifyButton.addEventListener('click', function () {
+    // 找到被點擊的按鈕所在的行
+    var rowToModify = modifyButton.parentNode.parentNode;
+
+    // 获取需要发送到服务器的数据
+    var dessID = rowToModify.cells[0].querySelector('input').value;
+    var name = rowToModify.cells[1].querySelector('input').value;
+    var price = rowToModify.cells[2].querySelector('input').value;
+    var type = rowToModify.cells[3].querySelector('input').value;
+
+    // 使用 AJAX 发送数据到服务器端的 PHP 脚本
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'create_dess.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // 处理从服务器返回的响应
+            console.log(xhr.responseText);
+        }
+    };
+
+    // 组装要发送的数据
+    var data = 'shop_id=' + shopID +
+               '&dess_id=' + dessID +
+               '&dess_name=' + name +
+               '&dess_price=' + price +
+               '&dess_type=' + type;
+
+    // 发送数据
+    xhr.send(data);
+
+    // 還原 "送出" 按鈕為 "修改" 按鈕
+    modifyButton.innerHTML = '修改';
+    modifyButton.onclick = function() {
+    modifyRow(shopID, dessID);
+    };
+});
+
+  
+
+  var deleteCell = newRow.insertCell(5);
+  var deleteButton = document.createElement('button');
+  deleteButton.type = 'submit';
+  deleteButton.className = 'delete-button';
+  deleteButton.innerText = '刪除';
+  deleteCell.appendChild(deleteButton);
+
+  deleteButton.addEventListener('click', function () {
+    // 找到被點擊的按鈕所在的行
+    var rowToDelete = deleteButton.parentNode.parentNode;
+    // 從表格中刪除該行
+    table.deleteRow(rowToDelete.rowIndex);
+});
+
+
+}
+
