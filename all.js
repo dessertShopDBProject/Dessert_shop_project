@@ -112,6 +112,24 @@ function deletionUser(userID){
   }
 }
 
+function deletionShop(shopID){
+  console.log('hi');
+  if (confirm('確定要刪除此店家嗎？')) {
+    window.location.href = 'delete_shop.php?id=' + shopID;
+  } else {
+    window.location.href = 'manager_index.php';
+  }
+}
+
+function deletionDess(shopID,dessID){
+  console.log('hi');
+  if (confirm('確定要刪除此甜點嗎？')) {
+    window.location.href = 'delete_dess.php?shop_id=' + shopID + '&dess_id=' + dessID;
+  } else {
+    window.location.href = 'manager_dessert_index.php?shop_id=' + shopID;
+  }
+}
+
 function setIndexZone(){
   var selected_zone=document.querySelectorAll('.zone-choice-dropdown>li')
   var indexSelectedZone=document.getElementById(indexSelectedZone);
