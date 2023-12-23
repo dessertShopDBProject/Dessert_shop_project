@@ -191,7 +191,7 @@ function handleDesstypeOptions(desstypeOptions,oriType) {
   });
 }
 
-function modifyRow(shopID, dessID) {
+function modifyRow(shopID, dessID,modifyButton) {
   var rowElement = document.getElementById('row_' + shopID + '_' + dessID);
   var textElements = rowElement.querySelectorAll('.text-element');
   // var textElements_2 = textElements;
@@ -277,7 +277,7 @@ function modifyRow(shopID, dessID) {
 
 
   // 將 "修改" 按鈕變成 "送出" 按鈕
-  var modifyButton = rowElement.querySelector('.modify-button');
+  modifyButton = rowElement.querySelector('.modify-button');
   modifyButton.innerHTML = '送出';
   // 按下送出按鈕後
   modifyButton.onclick = function() {
@@ -326,17 +326,7 @@ function modifyRow(shopID, dessID) {
         }
     } else {
         console.error('Input element at index ' + index + ' is undefined or does not exist.');
-        // 如果元素不存在，您可以設定一個預設值或執行其他處理邏輯
     }
-      // console.log(textElement.innerText);
-    //   if (index === 2) { // 如果是下拉選單的列
-    //     console.log(selectElement.options[selectElement.selectedIndex].innerText);
-    //     originalTextElement.innerText = selectElement.options[selectElement.selectedIndex].innerText;
-    //     // originalTextElement.innerText=oriT;
-    // } else {
-    //   originalTextElement.innerText = inputElements[index].value; // 內容保持不變
-    // }
-      // originalTextElement.innerText = inputElements[index].value; // 內容保持不變
       textElement.parentNode.replaceChild(originalTextElement, textElement);
 
     });
@@ -345,7 +335,7 @@ function modifyRow(shopID, dessID) {
     // 還原 "送出" 按鈕為 "修改" 按鈕
     modifyButton.innerHTML = '修改';
     modifyButton.onclick = function() {
-      modifyRow(shopID, dessID);
+      modifyRow(shopID, dessID,modifyButton);
     };
 
     // 移除取消按鈕
@@ -377,37 +367,46 @@ function addRow(shopID) {
 
   //自動配給ID
   var cell = newRow.insertCell(0);
-  var input = document.createElement('input');
-  input.type = 'text';
-  input.readOnly=true;
-  input.value=newID;
-  cell.appendChild(input);
+  cell.innerText=newID;
 
   // 建立單元格，並為每個單元格添加一個空白的文字框
-  for (var i = 1; i < 4; i++) {
+  for (var i = 1; i < 3; i++) {
       var cell = newRow.insertCell(i);
       var input = document.createElement('input');
       input.type = 'text';
+      cell.className = 'text-element';
       cell.appendChild(input);
   }
 
+  // 下拉式選單
+  var cell = newRow.insertCell(3);
+  selectElement = document.createElement('select'); // 移除 var 以便該變數在外部可見
+  selectElement.className = 'text-element';
+  // oriT=textElement.innerText;
+  getType(handleDesstypeOptions,"其他");
+  cell.className = 'text-element';
+  cell.appendChild(selectElement);
+
+
   // 建立「送出」和「刪除」按鈕
   var modifyCell = newRow.insertCell(4);
-  var modifyButton = document.createElement('button');
-  modifyButton.className = 'search-button modify-button';
-  modifyButton.innerText = '送出';
-  modifyCell.appendChild(modifyButton);
+  var modifyButton1 = document.createElement('button');
+  modifyButton1.className = 'search-button modify-button';
+  modifyButton1.innerText = '送出';
+  modifyCell.appendChild(modifyButton1);
   //按下送出
 // 添加送出按鈕的點擊事件處理程序
-modifyButton.addEventListener('click', function () {
+modifyButton1.addEventListener('click', function () {
     // 找到被點擊的按鈕所在的行
-    var rowToModify = modifyButton.parentNode.parentNode;
+    var rowToModify = modifyButton1.parentNode.parentNode;
 
     // 获取需要发送到服务器的数据
-    var dessID = rowToModify.cells[0].querySelector('input').value;
+    // var dessID = rowToModify.cells[0].querySelector('input').value;
+    var dessID = rowToModify.cells[0].innerText;
     var name = rowToModify.cells[1].querySelector('input').value;
     var price = rowToModify.cells[2].querySelector('input').value;
-    var type = rowToModify.cells[3].querySelector('input').value;
+    // var type = rowToModify.cells[3].querySelector('input').value;
+    var type = Array.from(selectElement.options).find(option => option.selected).innerText;
 
     // 使用 AJAX 发送数据到服务器端的 PHP 脚本
     var xhr = new XMLHttpRequest();
@@ -429,12 +428,18 @@ modifyButton.addEventListener('click', function () {
 
     // 发送数据
     xhr.send(data);
+    
+    rowToModify.cells[1].innerText = name;
+    rowToModify.cells[2].innerText = price;
+    rowToModify.cells[3].innerText = type;
 
     // 還原 "送出" 按鈕為 "修改" 按鈕
-    modifyButton.innerHTML = '修改';
-    modifyButton.onclick = function() {
-    modifyRow(shopID, dessID);
+    modifyButton1.removeEventListener('click', this);
+    modifyButton1.innerHTML = '修改';
+    modifyButton1.onclick = function() {
+    modifyRow(shopID, dessID,modifyButton1);
     };
+   
 });
 
   
@@ -455,4 +460,8 @@ modifyButton.addEventListener('click', function () {
 
 
 }
+
+
+
+
 
