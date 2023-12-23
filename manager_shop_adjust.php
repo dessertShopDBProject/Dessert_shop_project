@@ -91,8 +91,6 @@ require_once('db.php'); // 引入資料庫連線
             $shop_ForHere = $shop_ForHereResult->fetch_assoc();
             $shop_ForHere = $shop_ForHere["shop_ForHere"];
 
-
-
             // 檢查表單是否提交
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // 取得表單提交的資料
@@ -104,29 +102,22 @@ require_once('db.php'); // 引入資料庫連線
                 $newshop_FB = $_POST["newshop_FB"];
                 $newshop_Email = $_POST["newshop_Email"];
                 $newshop_Address = $_POST["newshop_Address"];
-                // $shop_ForHere = $_POST["shop_ForHere"];
-                // $shop_ForHere = isset($_POST["shop_ForHere"]) ? $_POST["shop_ForHere"] : null;
                 $newshop_ForHere = isset($_POST["newshop_ForHere"]) ? intval($_POST["newshop_ForHere"]) : NULL;
-                // if (isset($_POST["shop_ForHere"])) {
-                //     $shop_ForHere = $_POST["shop_ForHere"];
-                // }
-                // else{
-                //     $shop_ForHere=NULL;
-                // }
-
-                $updateSql = "UPDATE shop SET shop_Name='$newshop_Name', shop_Phone='$newshop_Phone', shop_Website='$newshop_Website', shop_IG='$newshop_IG', shop_FB='$newshop_FB', shop_Email='$newshop_Email', shop_Address='$newshop_Address', shop_ForHere='$newshop_ForHere' WHERE shop_ID='$shop_ID'";
-
-                if ($conn->query($updateSql) === TRUE) {
-                    header("Location: shop_info.php?shop_id=$shop_ID");
-                    exit();
-                } else {
-                    echo "錯誤：" . $conn->error;
+                if(isset($_FILES["fileToUpload"])){
+                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                    if($check !== false) {
+                        echo "File is an image - " . $check["mime"] . ".";
+                        $uploadOk = 1;
+                    } else {
+                        echo "File is not an image.";
+                        $uploadOk = 0;
+                    }
                 }
             }
         }
         ?>
         <div class="adjust-shop-main">
-            <h2>新增店家</h2>
+            <h2>修改店家</h2>
             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <label for="shop_ID">店家ID(不可更改)</label>
                 <input type="text" id="shop_ID" name="shop_ID" value="<?php echo $shop_ID; ?>" readonly>
@@ -146,11 +137,12 @@ require_once('db.php'); // 引入資料庫連線
                 <input type="text" id="newshop_Address" name="newshop_Address" value="<?php echo $shop_Address; ?>" required>
                 <label for="newshop_ForHere">內用/外帶(預設內用)</label>
                 <div>
-                <input type="radio" id="newshop_ForHere_1" name="newshop_ForHere" value="1" <?php if($shop_ForHere=='1'){echo "checked";} ?>><label for="newshop_ForHere_1">內用</label>
-                <input type="radio" id="newshop_ForHere_0" name="newshop_ForHere" value="0"<?php if($shop_ForHere=='0'){echo "checked";} ?>><label for="newshop_ForHere_0">外帶</label>
+                    <input type="radio" id="newshop_ForHere_1" name="newshop_ForHere" value="1" <?php if($shop_ForHere=='1'){echo "checked";} ?>><label for="newshop_ForHere_1">內用</label>
+                    <input type="radio" id="newshop_ForHere_0" name="newshop_ForHere" value="0"<?php if($shop_ForHere=='0'){echo "checked";} ?>><label for="newshop_ForHere_0">外帶</label>
                 </div>
                 <!-- 照片 -->
-                <button type="submit" class="user-update">送出</button>
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <button type="submit" class="user-update" name="submit">送出</button>
             </form>
         </div>
     </div>
@@ -164,3 +156,52 @@ require_once('db.php'); // 引入資料庫連線
 </body>
 
 </html>
+<?php
+
+if(isset($_FILES["fileToUpload"])){
+$target_dir = "./temp/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+//$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+//echo $_FILES['fileToUpload']['tmp_name'];
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+  }
+  
+  // Check file size
+  if ($_FILES["fileToUpload"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+  }
+  
+  // Allow certain file formats
+  if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+  && $imageFileType != "gif" ) {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+  }
+  
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+  // if everything is ok, try to upload file
+  } else {
+    $fileName=$newID;
+    $extension  = pathinfo( $_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION ); 
+    $baseName=$fileName.".".$extension;
+    $destination="./upload/{$baseName}";
+    //echo $destination;
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination);
+    
+    $updateSql = "UPDATE shop SET shop_Name='$newshop_Name', shop_Phone='$newshop_Phone', shop_Website='$newshop_Website', shop_IG='$newshop_IG', shop_FB='$newshop_FB', shop_Email='$newshop_Email', shop_Address='$newshop_Address', shop_ForHere='$newshop_ForHere', shop_Photo='$destination' WHERE shop_ID='$shop_ID'";
+
+    if ($conn->query($updateSql) === TRUE) {
+        header("Location: shop_info.php?shop_id=$shop_ID");
+        exit();
+    } else {
+        echo "錯誤：" . $conn->error;
+    }
+  }
+}
+?>

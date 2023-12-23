@@ -27,21 +27,21 @@ require_once 'db.php';
                 echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
             }
             ?>
-            <form action="index-select.php" method="GET" class="search-section">
+            <form action="select.php" method="GET" class="search-section">
                 <input type="button" name="zone-choice" id="index-zone-choice" value="選擇地區">
                 <ul class="zone-choice-dropdown">
-                    <li><a href="index-select.php?zone=中壢區">中壢區</a></li>
-                    <li><a href="index-select.php?zone=桃園區">桃園區</a></li>
+                    <li><a href="select.php?zone=中壢區">中壢區</a></li>
+                    <li><a href="select.php?zone=桃園區">桃園區</a></li>
                 </ul>
                 <input type="button" name="style-choice" id="index-style-choice" value="選擇種類">
                 <ul class="style-choice-dropdown">
                     <?php //更改處
-                    $sql = "SELECT * FROM desstype";
+                    $sql = "SELECT * FROM desstype LIMIT 10";
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             // Shop is visited
-                            echo "<li class='style' name='dess-type' id='dess-type'><a href='index-select.php?type=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
+                            echo "<li class='style' name='dess-type' id='dess-type'><a href='select.php?type=" . $row['desstype_Name'] . "' id='dess-type' >" . $row['desstype_Name'] . "</a></li>";
                         }
                     }
                     ?>
@@ -64,7 +64,7 @@ require_once 'db.php';
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理<br>店家</a></li>';
+                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
                     }
                     echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
                     echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';

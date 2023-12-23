@@ -58,13 +58,19 @@ require_once 'process_comment.php';
             // 顯示查詢結果
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
+                $shopPhoto=$row['shop_Photo'];
                 echo "
                 <div class='left-content'>
                     <div class='left-top'>
                     <div class='simple-intro'>
-                        <div class='shop-image'>
-                            <img src='../image/dessert.jpg' alt='店面照片'>
-                            <p class='shop-name'>" . $row['shop_Name'] . "</p>
+                        <div class='shop-image'>";
+                            if($shopPhoto!=''){
+                                echo "<img src='$shopPhoto' alt='店面照片'>";
+                            }
+                            else{
+                                echo "<img src='./image/no-image.png' alt='尚無圖片'>";
+                            }
+                            echo "<p class='shop-name'>" . $row['shop_Name'] . "</p>
                         </div> 
                         <div class='introduce'>
                             <h2>店家資訊</h2>

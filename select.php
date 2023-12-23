@@ -95,7 +95,7 @@ require_once 'db.php';
                 $noVisited = isset($_GET['no-visited']) ? true : false;
                 $fourStar = isset($_GET['four-star']) ? true : false;
                 
-                $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address,shop_Phone 
+                $sql = "SELECT DISTINCT shop.shop_ID, shop_Name, shop_Address,shop_Phone, shop_Photo 
                 FROM shop 
                 LEFT JOIN dessert ON shop.shop_ID = dessert.shop_ID
                 LEFT JOIN desstype ON dessert.desstype_ID=desstype.desstype_ID";
@@ -139,15 +139,27 @@ require_once 'db.php';
                     $result_rating=$conn->query($rating_sql);
                     
                     $shopName= $row["shop_Name"];
+                    $shopPhoto=$row["shop_Photo"];
                     echo"
                         <li>
-                        <div>
-                        <img src='./image/dessert.jpg' alt=$shopName>
+                        <div>";
+                        if($shopPhoto!=""){
+                            echo "<img src='$shopPhoto' alt=$shopName>";
+                        }
+                        else{
+                            echo "<img src='./image/no-image.png' alt=$shopName>";
+                        }
+                        echo "
                         <div class='shop-list-content'>
                                 <h2>$shopName</h2>";
-                            echo "
-                            <p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>
-                            <p><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>".$row['shop_Address']."</p>
+                            if($row['shop_Phone']!=''){
+                                echo "<p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>".$row['shop_Phone']."</p>";
+                            }
+                            else{
+                                echo "<p><i class='fa-solid fa-phone' style='color: #199b08; margin-right:5px;'></i>尚無電話資訊</p>";
+                            }
+                    
+                            echo "<p><i class='fas fa-map-marker-alt' style='color: #fb1313;margin-right:5px;'></i>".$row['shop_Address']."</p>
                             <p>";
                             $tagSql="SELECT COUNT(desstype_Name) AS SumofType,desstype_Name FROM dessert,desstype,shop
                             WHERE dessert.desstype_ID=desstype.desstype_ID  AND shop.shop_ID=dessert.shop_ID AND shop.shop_ID='$shopID'

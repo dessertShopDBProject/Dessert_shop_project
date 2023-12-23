@@ -1,3 +1,6 @@
+<?php 
+  require_once 'db.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +17,15 @@
 </body>
 </html>
 <?php
-$target_dir = "./temp/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+//$target_dir = "./temp/";
+//$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+//$uploadOk = 1;
+//$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+//echo $_FILES['fileToUpload']['tmp_name'];
 // Check if image file is a actual image or fake image
 if(isset($_POST["submit"])) {
+  $uploadOk=1;
+  /*
   $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
   if($check !== false) {
     echo "File is an image - " . $check["mime"] . ".";
@@ -27,8 +33,9 @@ if(isset($_POST["submit"])) {
   } else {
     echo "File is not an image.";
     $uploadOk = 0;
-  }
+  }*/
 }
+/*
 // Check if file already exists
 if (file_exists($target_file)) {
     echo "Sorry, file already exists.";
@@ -48,19 +55,30 @@ if (file_exists($target_file)) {
     $uploadOk = 0;
   }
   $fileName=0;
+  */
   // Check if $uploadOk is set to 0 by an error
   if ($uploadOk == 0) {
     echo "Sorry, your file was not uploaded.";
   // if everything is ok, try to upload file
   } else {
-    $fileName+=1;
+    $fileName=2;
     $extension  = pathinfo( $_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION ); 
     $baseName=$fileName.".".$extension;
     $destination="./upload/{$baseName}";
+    echo $destination;
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination);
+    /*sql = "UPDATE user SET user_Photo = '$destination' WHERE user_ID = 'u1101601'";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        echo "success";
+    } else {
+        echo "fail";
+    }*/
+    /*
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination)) {
       echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
     } else {
       echo "Sorry, there was an error uploading your file.";
-    }
+    }*/
   }
   
