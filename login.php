@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="all.css">
+
 </head>
 
 <body>
@@ -52,6 +53,10 @@
             // 驗證使用者資料
             $sql = "SELECT * FROM user WHERE user_Email = '$email' AND user_Password = '$password'";
             $result = $conn->query($sql);
+            $EmailQuery = "SELECT * FROM user WHERE user_Email = '$email'";
+            $EmailQueryresult = $conn->query($EmailQuery);
+
+
 
 
             if ($result->num_rows > 0) {
@@ -59,18 +64,27 @@
                 $nowUser = $conn->query("SELECT * FROM user  WHERE user_Email = '$email'");
                 $nowUser = $nowUser->fetch_assoc();
                 $_SESSION['nowUser'] = $nowUser;
-                echo '<script>alert("登入成功");</script>';
                 if ($_SESSION['nowUser']['user_Role'] == "manager") {
                     header("Location: manager_index.php");
                 } else {
                     header("Location: index.php");
                 }
+                echo "<script>setTimeout(function() {alert('登入成功');});</script>";
                 exit();
-            } else {
-                // 登入失敗
-                $error_message = "帳號或密碼錯誤";
-                echo '<script>alert("帳號或密碼錯誤") ; window.location.href = "login.php";</script>';
-                exit();
+            } 
+            else {
+                if($EmailQueryresult->num_rows > 0){
+                    // 登入失敗(密碼錯誤)
+                    $error_message = "密碼錯誤";
+                    echo '<script>alert("密碼錯誤") ; window.location.href = "login.php";</script>';
+                    exit();
+                }
+                else{
+                    // 登入失敗
+                    $error_message = "帳號錯誤or尚未註冊";
+                    echo '<script>alert("帳號或密碼錯誤or尚未註冊") ; window.location.href = "login.php";</script>';
+                    exit();
+                }
             }
 
         }
