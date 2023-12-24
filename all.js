@@ -142,13 +142,14 @@ function deletionShop(shopID){
 }
 
 function deletionDess(shopID,dessID){
+  if (!isNewRowBeingAdded) {
   console.log('hi');
   if (confirm('確定要刪除此甜點嗎？')) {
-    window.location.href = '../dessert/delete_dess.php?shop_id=' + shopID + '&dess_id=' + dessID;
+    window.location.href = 'delete_dess.php?shop_id=' + shopID + '&dess_id=' + dessID;
   } else {
-    window.location.href = '../dessert/manager_dessert_index.php?shop_id=' + shopID;
+    window.location.href = 'manager_dessert_index.php?shop_id=' + shopID;
   }
-}
+}}
 
 function setIndexZone(){
   var selected_zone=document.querySelectorAll('.zone-choice-dropdown>li')
@@ -281,6 +282,7 @@ function modifyRow(shopID, dessID,modifyButton) {
   modifyButton.innerHTML = '送出';
   // 按下送出按鈕後
   modifyButton.onclick = function() {
+    if (!isNewRowBeingAdded) {
 // console.log(inputElements.length); ->3
       // 在這裡執行送出的相應邏輯，例如使用 AJAX 發送到後端
       var newValues = inputElements.map(function(inputElement,index) {
@@ -340,9 +342,11 @@ function modifyRow(shopID, dessID,modifyButton) {
 
     // 移除取消按鈕
     cancelButton.parentNode.removeChild(cancelButton);
+    }
   };
 }
 
+var isNewRowBeingAdded = true;
 
 function addRow(shopID) {
   // 獲取表格
@@ -404,7 +408,7 @@ function addRow(shopID) {
   modifyCell.appendChild(modifyButton1);
   //按下送出
 // 添加送出按鈕的點擊事件處理程序
-modifyButton1.addEventListener('click', function () {
+modifyButton1.addEventListener('click', function handleModifyButtonClick() {
     // 找到被點擊的按鈕所在的行
     var rowToModify = modifyButton1.parentNode.parentNode;
 
@@ -444,12 +448,20 @@ modifyButton1.addEventListener('click', function () {
     rowToModify.cells[3].innerText = type;
 
     // 還原 "送出" 按鈕為 "修改" 按鈕
-    modifyButton1.removeEventListener('click', this);
     modifyButton1.innerHTML = '修改';
-    modifyButton1.onclick = function() {
-    modifyRow(shopID, dessID,modifyButton1);
+    modifyButton1.onclick = function () {
+      modifyRow(shopID, dessID, modifyButton1); // 傳遞 modifyButton1 給 modifyRow 函數
     };
-   
+
+    // 移除事件監聽器，使其不再觸發
+    modifyButton1.removeEventListener('click', handleModifyButtonClick);
+    isNewRowBeingAdded = false; // 將 isNewRowBeingAdded 設置為 false
+  // });
+  deleteButton.onclick = function () {
+    deletionDess(shopID, dessID, deleteButton); // 傳遞 modifyButton1 給 modifyRow 函數
+  };
+  // 移除事件監聽器，使其不再觸發
+  deleteButton.removeEventListener('click', handleModifyButtonClick1);
 });
 
   
@@ -461,7 +473,7 @@ modifyButton1.addEventListener('click', function () {
   deleteButton.innerText = '刪除';
   deleteCell.appendChild(deleteButton);
 
-  deleteButton.addEventListener('click', function () {
+  deleteButton.addEventListener('click', function handleModifyButtonClick1() {
     // 找到被點擊的按鈕所在的行
     var rowToDelete = deleteButton.parentNode.parentNode;
     // 從表格中刪除該行
