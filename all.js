@@ -111,42 +111,42 @@ function submitForm(){
 
 function deletionAlert(shopID){
   if (confirm("確定要刪除評論嗎？")) {
-    window.location.href = "delete_comment.php?shop_id=" + shopID;
+    window.location.href = "../comment/delete_comment.php?shop_id=" + shopID;
   } else {
-    window.location.href = "shop_info.php?shop_id=" + shopID;
+    window.location.href = "../shop/shop_info.php?shop_id=" + shopID;
   }
 }
 
 function deletionFavorite(shopID){
   if (confirm("確定要取消收藏嗎？")) {
-    window.location.href = "deleteFavorite.php?id=" + shopID;
+    window.location.href = "../favorite/deleteFavorite.php?id=" + shopID;
   }
 }
 
 function deletionUser(userID){
   console.log('hi');
   if (confirm("確定要刪除帳號嗎？")) {
-    window.location.href = "delete_userinfo.php?user_id=" + userID;
+    window.location.href = "../user/delete_userinfo.php?user_id=" + userID;
   } else {
-    window.location.href = "user_info.php?user_id=" + userID;
+    window.location.href = "../user/user_info.php?user_id=" + userID;
   }
 }
 
 function deletionShop(shopID){
   console.log('hi');
   if (confirm('確定要刪除此店家嗎？')) {
-    window.location.href = 'delete_shop.php?id=' + shopID;
+    window.location.href = '../shop/delete_shop.php?id=' + shopID;
   } else {
-    window.location.href = 'manager_index.php';
+    window.location.href = '../manager_index.php';
   }
 }
 
 function deletionDess(shopID,dessID){
   console.log('hi');
   if (confirm('確定要刪除此甜點嗎？')) {
-    window.location.href = 'delete_dess.php?shop_id=' + shopID + '&dess_id=' + dessID;
+    window.location.href = '../dessert/delete_dess.php?shop_id=' + shopID + '&dess_id=' + dessID;
   } else {
-    window.location.href = 'manager_dessert_index.php?shop_id=' + shopID;
+    window.location.href = '../dessert/manager_dessert_index.php?shop_id=' + shopID;
   }
 }
 
@@ -162,7 +162,7 @@ var selectElement;
 
 function getType(callback,oriType) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'select_type.php', true);
+  xhr.open('GET', '../dessert/select_type.php', true);
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && xhr.status == 200) {
@@ -348,6 +348,7 @@ function addRow(shopID) {
   // 獲取表格
   var table = document.getElementById('dessert-table');
   // 獲取最后一行第一个 <td> 的值
+
   var lastRow = table.rows[table.rows.length - 1];
   if (lastRow.cells[0].querySelector('input')) {
     var firstCellValue = lastRow.cells[0].querySelector('input').value;
@@ -356,10 +357,17 @@ function addRow(shopID) {
     var firstCellValue = lastRow.cells[0].innerText;
   }
   var lastNumber = parseInt(firstCellValue.substr(2, 2), 10);
-  var newNumber = lastNumber + 1;
+
+  if(!isNaN(lastNumber)){
+    var newNumber = lastNumber + 1;
+  }
+  else{
+    var newNumber = 1;
+
+  }
+
   var newID = 'd_' + ('00' + newNumber).slice(-2);
-  
-  
+
 
   // 創建新行
   var newRow = table.insertRow(-1);
@@ -407,10 +415,12 @@ modifyButton1.addEventListener('click', function () {
     var price = rowToModify.cells[2].querySelector('input').value;
     // var type = rowToModify.cells[3].querySelector('input').value;
     var type = Array.from(selectElement.options).find(option => option.selected).innerText;
+    var typevalue = Array.from(selectElement.options).find(option => option.selected).value;
+
 
     // 使用 AJAX 发送数据到服务器端的 PHP 脚本
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'create_dess.php', true);
+    xhr.open('POST', '../dessert/create_dess.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -424,7 +434,7 @@ modifyButton1.addEventListener('click', function () {
                '&dess_id=' + dessID +
                '&dess_name=' + name +
                '&dess_price=' + price +
-               '&dess_type=' + type;
+               '&dess_type=' +  typevalue;
 
     // 发送数据
     xhr.send(data);
