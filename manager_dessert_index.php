@@ -111,7 +111,10 @@ require_once 'db.php';
                     echo "</table>";
                     echo "<button onclick=\"addRow('$shopID')\">新增</button>";
                 } else {
-                    echo "0 筆結果";
+                    echo "<div class='noDess'>0 筆結果</div><br>";
+                    echo "<table id='dessert-table'><tr><th>ID</th><th>名稱</th><th>價格</th><th>類型</th><th> </th></tr>";
+                    echo "</table>";
+                    echo "<button onclick=\"addRow('$shopID')\">新增</button>";
                 }
 
                 $conn->close();
