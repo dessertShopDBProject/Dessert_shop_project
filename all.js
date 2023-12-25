@@ -163,7 +163,7 @@ var selectElement;
 
 function getType(callback,oriType) {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '../dessert/select_type.php', true);
+  xhr.open('GET', 'select_type.php', true);
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && xhr.status == 200) {
@@ -515,6 +515,11 @@ modifyButton1.addEventListener('click', function handleModifyButtonClick() {
 
 
 }
+
+
+
+
+
 
 
 
