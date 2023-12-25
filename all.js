@@ -352,18 +352,32 @@ function addRow(shopID) {
   // 獲取表格
   var table = document.getElementById('dessert-table');
   // 獲取最后一行第一个 <td> 的值
-
+  // var lastRow = table.rows[table.rows.length - 1];
+  // if (lastRow.cells[0].querySelector('input')) {
+  //   var firstCellValue = lastRow.cells[0].querySelector('input').value;
+  // } 
+  // else {
+  //   var firstCellValue = lastRow.cells[0].innerText;
+  // }
+  // var lastNumber = parseInt(firstCellValue.substr(2, 2), 10);
+  // var newNumber = lastNumber + 1;
+  // var newID = 'd_' + ('00' + newNumber).slice(-2);
+  
   var lastRow = table.rows[table.rows.length - 1];
   if (lastRow.cells[0].querySelector('input')) {
     var firstCellValue = lastRow.cells[0].querySelector('input').value;
   } 
-  else {
+  else if (lastRow.cells[0].textContent.trim() !== "店家ID") {
     var firstCellValue = lastRow.cells[0].innerText;
+  }
+  else{
+    var firstCellValue=null;
   }
   var lastNumber = parseInt(firstCellValue.substr(2, 2), 10);
 
   if(!isNaN(lastNumber)){
     var newNumber = lastNumber + 1;
+
   }
   else{
     var newNumber = 1;
@@ -371,6 +385,7 @@ function addRow(shopID) {
   }
 
   var newID = 'd_' + ('00' + newNumber).slice(-2);
+
 
 
   // 創建新行
@@ -410,6 +425,13 @@ function addRow(shopID) {
 // 添加送出按鈕的點擊事件處理程序
 modifyButton1.addEventListener('click', function handleModifyButtonClick() {
     // 找到被點擊的按鈕所在的行
+    var noDessElement = document.querySelector('.noDess');
+
+    // 检查是否找到元素
+    if (noDessElement) {
+      // 如果找到了，删除该元素
+     noDessElement.parentNode.removeChild(noDessElement);
+    }
     var rowToModify = modifyButton1.parentNode.parentNode;
 
     // 获取需要发送到服务器的数据
@@ -419,12 +441,10 @@ modifyButton1.addEventListener('click', function handleModifyButtonClick() {
     var price = rowToModify.cells[2].querySelector('input').value;
     // var type = rowToModify.cells[3].querySelector('input').value;
     var type = Array.from(selectElement.options).find(option => option.selected).innerText;
-    var typevalue = Array.from(selectElement.options).find(option => option.selected).value;
-
 
     // 使用 AJAX 发送数据到服务器端的 PHP 脚本
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '../dessert/create_dess.php', true);
+    xhr.open('POST', 'create_dess.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -438,7 +458,7 @@ modifyButton1.addEventListener('click', function handleModifyButtonClick() {
                '&dess_id=' + dessID +
                '&dess_name=' + name +
                '&dess_price=' + price +
-               '&dess_type=' +  typevalue;
+               '&dess_type=' + type;
 
     // 发送数据
     xhr.send(data);
@@ -474,10 +494,23 @@ modifyButton1.addEventListener('click', function handleModifyButtonClick() {
   deleteCell.appendChild(deleteButton);
 
   deleteButton.addEventListener('click', function handleModifyButtonClick1() {
-    // 找到被點擊的按鈕所在的行
-    var rowToDelete = deleteButton.parentNode.parentNode;
-    // 從表格中刪除該行
-    table.deleteRow(rowToDelete.rowIndex);
+    // if(isNewRowBeingAdded){
+      // 找到被點擊的按鈕所在的行
+      var rowToDelete = deleteButton.parentNode.parentNode;
+      // 從表格中刪除該行
+      table.deleteRow(rowToDelete.rowIndex);
+    // }
+    // else{
+    //   var rowToModify = deleteButton.parentNode.parentNode;
+    //   var dessID = rowToModify.cells[0].innerText;
+
+    //   deleteButton.onclick = function () {
+    //     deletionDess(shopID, dessID, deleteButton); // 傳遞 modifyButton1 給 modifyRow 函數
+    //   };
+    //   // 移除事件監聽器，使其不再觸發
+    //   deleteButton.removeEventListener('click', handleModifyButtonClick1);
+    // }
+
 });
 
 
