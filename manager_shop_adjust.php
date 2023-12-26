@@ -108,7 +108,7 @@ ob_start();
                     <label for="newshop_Name">名稱</label>
                     <input type="text" id="newshop_Name" name="newshop_Name" value="<?php echo $shop_Name; ?>" required>
                     <label for="newshop_Phone">電話</label>
-                    <input type="text" id="newshop_Phone" name="newshop_Phone" value="<?php echo $shop_Phone; ?>">
+                    <input type="text" id="newshop_Phone" name="newshop_Phone" maxlength="10" value="<?php echo $shop_Phone; ?>">
                     <label for="newshop_Website">網站</label>
                     <input type="text" id="newshop_Website" name="newshop_Website" value="<?php echo $shop_Website; ?>">
                     <label for="newshop_IG">IG</label>
@@ -192,7 +192,7 @@ ob_start();
                         }
 
                         echo '<div class="day-create">';
-                        echo '<input type="checkbox" value = "on" name="' . strtolower($englishDays[$i]) . '_status"> 休息';
+                        echo '<input type="checkbox" value = "on" name="' . strtolower($englishDays[$i]) . '_status" > 休息';
                         echo '<label for="' . strtolower($englishDays[$i]) . '">' . $chineseDays[$i] . '</label>';
                         echo "<input type='time' name='" . strtolower($englishDays[$i]) . "_open_time' value='$opentime'> - <input type='time' name='" . strtolower($englishDays[$i]) . "_close_time' value='$closetime'>";
                         echo '</div>';
@@ -243,10 +243,10 @@ if (isset($_FILES["fileToUpload"])) {
     }
     */
     // 检查文件大小
-    if ($_FILES["fileToUpload"]["size"] > 500000) {
-        $message="圖片檔案太大";
-        $uploadOk = 0;
-    }
+    // if ($_FILES["fileToUpload"]["size"] > 500000) {
+    //     $message="圖片檔案太大";
+    //     $uploadOk = 0;
+    // }
 
     // 允许的文件类型
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $shop_PhotoResult->num_rows < 0 ) {
@@ -264,7 +264,7 @@ if (isset($_FILES["fileToUpload"])) {
         $extension  = pathinfo( $_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION ); 
         $baseName=$shop_ID.".".$extension;
         $destination="../upload/{$baseName}";
-        unlink($destination);
+        //unlink($destination);
         //echo $destination;
         move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination);
     }
