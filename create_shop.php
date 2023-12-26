@@ -1,5 +1,5 @@
 <?php
-require_once('db.php'); // 引入資料庫連線
+require_once('../db.php'); // 引入資料庫連線
 ob_start();
 ?>
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ ob_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" href="../css/all.css">
 </head>
 
 </html>
@@ -20,9 +20,9 @@ ob_start();
         <div class="navbar">
             <?php
             if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
-                echo "<h1 class='logo'><a href='manager_index.php'>搜蒐甜點店</a></h1>";
+                echo "<h1 class='logo'><a href='../manager_index.php'>搜蒐甜點店</a></h1>";
             } else {
-                echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
+                echo "<h1 class='logo'><a href='../index.php'>搜蒐甜點店</a></h1>";
             }
             ?>
             <ul class="nav">
@@ -30,16 +30,16 @@ ob_start();
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
+                        echo '<li class="nav-content"><a href="../manager_index.php">管理店家</a></li>';
                     }
-                    echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
-                    echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
-                    echo '<li class="nav-content"><a href="user_info.php?userid=' . $_SESSION['nowUser']['user_ID'] . '"><i class="fa-solid fa-user"></i></a></li>';
+                    echo '<li class="nav-content"><a href="../favorite/favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
+                    echo '<li class="nav-content"><a href="../gallery/gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
+                    echo '<li class="nav-content"><a href="../user/user_info.php?userid=' . $_SESSION['nowUser']['user_ID'] . '"><i class="fa-solid fa-user"></i></a></li>';
                 } else {
                     // 使用者未登入
                     echo '<li class="nav-content hide"><a href="#">收藏</a></li>';
                     echo '<li class="nav-content hide"><a href="#">圖鑑</a></li>';
-                    echo '<li class="nav-content"><a href="signup.php"><i class="fa-solid fa-user"></i></a></li>';
+                    echo '<li class="nav-content"><a href="../user/signup.php"><i class="fa-solid fa-user"></i></a></li>';
                 }
                 ?>
 
@@ -83,22 +83,18 @@ ob_start();
                         <input type="radio" id="shop_ForHere_0" name="shop_ForHere" value="0"><label for="newshop_ForHere_0">外帶</label>
                     </div>
                     <!-- 照片 -->
-                    <input type="file" name="fileToUpload" id="fileToUpload">
+                    <input type="file" name="fileToUpload" id="fileToUpload" accept="image/*">
                     <button type="submit" class="user-update">送出</button>
                 </div>
-                <div class="adjust-shop-main-right">
+                <div class="create-shop-main-right">
                 <h3>營業時間</h3>
                 <?php
                 $chineseDays = array("星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日");
                 $englishDays = array("mon", "tue", "wed", "thu", "fri", "sat", "sun");
                 for ($i = 0; $i < count($chineseDays); $i++) {
                     echo '<div class="day-create">';
+                    echo '<input type="checkbox" value = "on" name="' . strtolower($englishDays[$i]) . '_status"> 休息';
                     echo '<label for="' . strtolower($englishDays[$i]) . '">' . $chineseDays[$i] . '</label>';
-                    echo '<label class="switch">';
-                    echo '<input class="toggle" id="' . strtolower($englishDays[$i]) . '" type="checkbox" name="' . strtolower($englishDays[$i]) . '_status">';
-                    echo '<span class="slider"></span>';
-                    echo '</label>';
-                    echo '<span id="' . strtolower($englishDays[$i]) . '-open-status">未營業</span>';
                     echo '<input type="time" name="' . strtolower($englishDays[$i]) . '_open_time"> - <input type="time" name="' . strtolower($englishDays[$i]) . '_close_time">';
                     echo '</div>';
                 }
@@ -114,30 +110,31 @@ ob_start();
             <p>Copyright © 2023 搜蒐甜點店 All Rights Reserved</p>
         </div>
     </div>
-    <script src="all.js"></script>
+    <script src="../js/all.js"></script>
 </body>
 </html>
 <?php 
     if(isset($_FILES["fileToUpload"])){
-        $target_dir = "./temp/";
+        $target_dir = "../temp/";
         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         //echo $_FILES['fileToUpload']['tmp_name'];
+        /*
         if (file_exists($target_file)) {
             //echo "Sorry, file already exists.";
             $uploadOk = 0;
         }
-        
+        */
         // Check file size
         if ($_FILES["fileToUpload"]["size"] > 500000) {
-            //echo "Sorry, your file is too large.";
+            $message="圖片檔案太大";
             $uploadOk = 0;
         }
         
         // Allow certain file formats
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-            //echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            //$message="圖片格式不正確，應為 jpg, png, jpeg 或 gif 檔";
             $uploadOk = 0;
         }
         
@@ -150,7 +147,7 @@ ob_start();
             $fileName=$newID;
             $extension  = pathinfo( $_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION ); 
             $baseName=$fileName.".".$extension;
-            $destination="./upload/{$baseName}";
+            $destination="../upload/{$baseName}";
             //echo $destination;
             move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination);
         }
@@ -158,6 +155,7 @@ ob_start();
     if (isset($_SESSION["nowUser"]) && !empty($_SESSION["nowUser"]) && $_SESSION['nowUser']['user_Role'] == "manager") {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // 取得表單提交的資料
+
             $shop_ID = $_POST["shop_ID"];
             $shop_Name = $_POST["shop_Name"];
             $shop_Phone = $_POST["shop_Phone"];
@@ -167,7 +165,8 @@ ob_start();
             $shop_Email = $_POST["shop_Email"];
             $shop_Address = $_POST["shop_Address"];
             $shop_ForHere = isset($_POST["shop_ForHere"]) ? intval($_POST["shop_ForHere"]) : NULL;
-            if (isset($_FILES["fileToUpload"]) && $_FILES["fileToUpload"]["tmp_name"] != ''){
+            
+        if (isset($_FILES["fileToUpload"]) && $_FILES["fileToUpload"]["tmp_name"] != ''){
                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                 if($check !== false) {
                     $uploadOk = 1;
@@ -175,6 +174,14 @@ ob_start();
                     $uploadOk = 0;
                 }
             }
+            $ExistSQL = "SELECT shop_Name FROM shop WHERE shop_Name = '$shop_Name' AND shop_Address = '$shop_Address'";
+            $ExistSQLResult = $conn->query($ExistSQL);
+
+            if($ExistSQLResult->num_rows > 0){
+                echo "<script>alert('店家已經存在了喔!')</script>";
+                exit();
+            }
+            
             // 新增進資料庫內
             $insertSql = "INSERT INTO shop(shop_ID, shop_Name, shop_Phone, shop_Website, shop_IG, shop_FB, shop_Email, shop_Address, shop_ForHere,shop_Photo) VALUES ('$shop_ID', '$shop_Name', '$shop_Phone', '$shop_Website', '$shop_IG', '$shop_FB', '$shop_Email', '$shop_Address', '$shop_ForHere','$destination')";
             if ($conn->query($insertSql) !== TRUE) {
@@ -184,27 +191,31 @@ ob_start();
             $days = array("mon", "tue", "wed", "thu", "fri", "sat", "sun");
             $chineseDays = array("星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日");
             for ($i = 0; $i < count($chineseDays); $i++) {
-                $status = isset($_POST[$chineseDays[$i] . '_status']) && $_POST[$chineseDays[$i] . '_status'] == 'on' ? '營業中' : '未營業';
+                $status = isset($_POST[$days[$i] . '_status']) && $_POST[$days[$i] . '_status'] == 'on' ? '休息' :'營業中'  ;
                 $openTime = isset($_POST[$days[$i] .'_open_time']) && $_POST[$days[$i] .'_open_time'] != '' ? $_POST[$days[$i] .'_open_time'] : '';
-                $openTime12  = $openTime != '' ? date("A g:i", strtotime($openTime)) : '未營業';
+                $openTime12  = $openTime != '' ? date("A g:i", strtotime($openTime)) : '休息';
                 $openTime12 = str_replace("AM", "上午", $openTime12);
                 $openTime12 = str_replace("PM", "下午", $openTime12);
                 $closeTime = isset($_POST[$days[$i] . '_close_time']) && $_POST[$days[$i] . '_close_time'] != '' ? $_POST[$days[$i] . '_close_time'] : '';
-                $closeTime12 = $closeTime != '' ? date("A g:i", strtotime($closeTime)) : '未營業';
+                $closeTime12 = $closeTime != '' ? date("A g:i", strtotime($closeTime)) : '休息';
                 $closeTime12 = str_replace("AM", "上午", $closeTime12);
                 $closeTime12 = str_replace("PM", "下午", $closeTime12);
-                if($openTime != "" && $closeTime != ""){
-                    $sql = "INSERT INTO opentime (shop_ID, shop_OpenWeek, shop_OpenTime)VALUES ('$shop_ID', '$chineseDays[$i]', '$openTime12 - $closeTime12')";
-                }
-                else{
-                    $sql = "INSERT INTO opentime (shop_ID, shop_OpenWeek, shop_OpenTime)
-                    VALUES ('$shop_ID', '$chineseDays[$i]', '休息')";
-                }
+
+
+                    if ($status == '休息' || $openTime =="" || $closeTime ==""){
+                        $sql = "INSERT INTO opentime (shop_ID, shop_OpenWeek, shop_OpenTime)
+                        VALUES ('$shop_ID', '$chineseDays[$i]', '休息')";
+                    }
+                    else{
+                        $sql = "INSERT INTO opentime (shop_ID, shop_OpenWeek, shop_OpenTime)VALUES ('$shop_ID', '$chineseDays[$i]', '$openTime12 - $closeTime12')";
+                    }
+
+
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
             }
-            header("Location: manager_index.php");
+            header("Location: ../manager_index.php?message=$message");
             exit();
         }
     }

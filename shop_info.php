@@ -1,6 +1,6 @@
 <?php
-require_once 'db.php';
-require_once 'process_comment.php';
+require_once '../db.php';
+require_once '../comment/process_comment.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,8 +12,7 @@ require_once 'process_comment.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="all.css">
-
+    <link rel="stylesheet" type="text/css" href="../css/all.css">
 </head>
 
 <body>
@@ -21,9 +20,9 @@ require_once 'process_comment.php';
         <div class="navbar">
             <?php
             if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
-                echo "<h1 class='logo'><a href='manager_index.php'>搜蒐甜點店</a></h1>";
+                echo "<h1 class='logo'><a href='../manager_index.php'>搜蒐甜點店</a></h1>";
             } else {
-                echo "<h1 class='logo'><a href='index.php'>搜蒐甜點店</a></h1>";
+                echo "<h1 class='logo'><a href='../index.php'>搜蒐甜點店</a></h1>";
             }
             ?>
             <ul class="nav">
@@ -31,16 +30,16 @@ require_once 'process_comment.php';
                 if (isset($_SESSION['nowUser'])) {
                     // 使用者已登入，顯示收藏和圖鑑
                     if ($_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo '<li class="nav-content"><a href="manager_index.php">管理店家</a></li>';
+                        echo '<li class="nav-content"><a href="../manager_index.php">管理店家</a></li>';
                     }
-                    echo '<li class="nav-content"><a href="favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
-                    echo '<li class="nav-content"><a href="gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
-                    echo '<li class="nav-content"><a href="user_info.php?userid=' . $_SESSION['nowUser']['user_ID'] . '"><i class="fa-solid fa-user"></i></a></li>';
+                    echo '<li class="nav-content"><a href="../favorite/favorite.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">收藏</a></li>';
+                    echo '<li class="nav-content"><a href="../gallery/gallery.php?userid=' . $_SESSION['nowUser']['user_ID'] . '">圖鑑</a></li>';
+                    echo '<li class="nav-content"><a href="../user/user_info.php?userid=' . $_SESSION['nowUser']['user_ID'] . '"><i class="fa-solid fa-user"></i></a></li>';
                 } else {
                     // 使用者未登入
                     echo '<li class="nav-content hide"><a href="#">收藏</a></li>';
                     echo '<li class="nav-content hide"><a href="#">圖鑑</a></li>';
-                    echo '<li class="nav-content"><a href="signup.php"><i class="fa-solid fa-user"></i></a></li>';
+                    echo '<li class="nav-content"><a href="../user/signup.php"><i class="fa-solid fa-user"></i></a></li>';
                 }
                 ?>
             </ul>
@@ -49,6 +48,16 @@ require_once 'process_comment.php';
             <?php
             // 獲取 Shop_ID 參數
             $shopID = isset($_GET['shop_id']) ? $_GET['shop_id'] : '';
+            $message=isset($_GET['message']) ? $_GET['message'] : '';
+            if($message!=""){
+                echo "<script>alert('$message');</script>";
+                echo "<script>
+                var currentUrl = window.location.pathname + '?shop_id=$shopID';
+                history.replaceState({}, document.title, currentUrl);
+                </script>";
+            }
+            
+            
             if (isset($_SESSION['nowUser']['user_ID'])) {
                 $userID = $_SESSION['nowUser']['user_ID'];
             }
@@ -58,13 +67,19 @@ require_once 'process_comment.php';
             // 顯示查詢結果
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
+                $shopPhoto=$row['shop_Photo'];
                 echo "
                 <div class='left-content'>
                     <div class='left-top'>
                     <div class='simple-intro'>
-                        <div class='shop-image'>
-                            <img src='../image/dessert.jpg' alt='店面照片'>
-                            <p class='shop-name'>" . $row['shop_Name'] . "</p>
+                        <div class='shop-image'>";
+                            if($shopPhoto!=''){
+                                echo "<img src='$shopPhoto' alt='店面照片'>";
+                            }
+                            else{
+                                echo "<img src='../image/no-image.png' alt='尚無圖片'>";
+                            }
+                            echo "<p class='shop-name'>" . $row['shop_Name'] . "</p>
                         </div> 
                         <div class='introduce'>
                             <h2>店家資訊</h2>
@@ -178,21 +193,22 @@ require_once 'process_comment.php';
                     $result_visited = $conn->query($visited_sql);
                     $row_visited = $result_visited->fetch_assoc();
                     if ($row_favorite != null) {
-                    echo "<li class='favorite-link' data-shopid=$shopID><i class='fa-solid fa-heart'></i>收藏</li>";
+                    echo "<li class='favorite-link' data-shopid=$shopID><a href='../favorite/deleteFavorite.php?id=$shopID'><i class='fa-solid fa-heart'></i>收藏</li>";
                     } else if ($row_favorite == null) {
-                        echo "<li class='favorite-link' data-shopid=$shopID><a href='addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>";
+                        echo "<li class='favorite-link' data-shopid=$shopID><a href='../favorite/addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>";
                     }
                     if ($row_visited != null) {
-                        echo "<li class='collect-link'><a href='addToGallery.php?id=$shopID'><i class='fa-solid fa-check' aria-hidden='true'></i>圖鑑</a></li>";
+                        echo "<li class='collect-link'><a href='../gallery/addToGallery.php?id=$shopID'><i class='fa-solid fa-check' aria-hidden='true'></i>圖鑑</a></li>";
                     } else if ($row_visited == null) {
-                        echo "<li class='collect-link'><a href='addToGallery.php?id=$shopID'><i class='fa fa-plus' aria-hidden='true'></i>圖鑑</a></li>";
+                        echo "<li class='collect-link'><a href='../gallery/addToGallery.php?id=$shopID'><i class='fa fa-plus' aria-hidden='true'></i>圖鑑</a></li>";
                     }
                     if (isset($_SESSION['nowUser']) && $_SESSION['nowUser']['user_Role'] == "manager") {
-                        echo "<li class='collect-link'><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><i class='fa fa-pencil' aria-hidden='true'></i>修改</a></li>";
+                        echo "<li class='collect-link'><a href='manager_shop_adjust.php?shop_id=" . $row["shop_ID"] . "'><i class='fa fa-pencil' aria-hidden='true'></i>修改店家</a></li>";
+                        echo "<li class='collect-link'><a href='../dessert/manager_dessert_index.php?shop_id=" . $row["shop_ID"] . "'><i class='fa fa-pencil' aria-hidden='true'></i>修改甜點</a></li>";
                     }
                 } else {
-                    echo "<li class='favorite-link' data-shopid=$shopID><a href='addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>
-                        <li class='collect-link'><a href='addToGallery.php?id=$shopID'><i class='fa fa-plus' aria-hidden='true'></i>圖鑑</a></li>";
+                    echo "<li class='favorite-link' data-shopid=$shopID><a href='../favorite/addToFavorite.php?id=$shopID'><i class='fa-regular fa-heart'></i>收藏</a></li>
+                        <li class='collect-link'><a href='../gallery/addToGallery.php?id=$shopID'><i class='fa fa-plus' aria-hidden='true'></i>圖鑑</a></li>";
                 }
                 echo "
                     </ul>
@@ -225,17 +241,14 @@ require_once 'process_comment.php';
                         $dessert_result = $conn->query($dessert_sql);
                         // $all_dessert_sql = "SELECT * FROM dessert WHERE  shop_ID = '$shopID'";
                         // $all_dessert_result = $conn->query($all_dessert_sql);
-                
+                        echo "<ul class='dessert-list' id='dessert-list'>";
                         if ($dessert_result->num_rows > 0) {
-                            echo "<ul class='dessert-list' id='dessert-list'>";
                             while ($dessert_row = $dessert_result->fetch_assoc()) {
                                 echo "<li class='dessert'>
-                                    <img src='../image/dessert.jpg' alt=''>
                                     <h3>" . $dessert_row['dess_Name'] . "</h3>
                                     <p>$" . $dessert_row['dess_Price'] . "</p>
                                 </li>";
                             }
-                            echo "</ul>";
                         } else {
                             echo "
                             <li class='no-dessert'>
@@ -289,7 +302,7 @@ require_once 'process_comment.php';
                 <div id="commentFormOverlay" class="overlay">
                     <div class="comment-form">
                         <p class='comment-user'></p>
-                        <form action="process_comment.php" method="POST">
+                        <form action="../comment/process_comment.php" method="POST">
                             <input type="hidden" name="shop_id" value="<?php echo $row['shop_ID']; ?>">
                             <ul class='comment-rating'>
                                 <span>極差</span>
@@ -312,7 +325,7 @@ require_once 'process_comment.php';
                 <!-- 彈出的評論表單模態視窗(修改) -->
                 <div id="commentEditFormOverlay" class="Editoverlay">
                     <div class="comment-form">
-                        <form action="update_comment.php" method="POST">
+                        <form action="../comment/update_comment.php" method="POST">
                             <input type="hidden" name="shop_id" value="<?php echo $row['shop_ID']; ?>">
                             <?php echo "
                         <ul class='comment-rating'>
@@ -345,7 +358,7 @@ require_once 'process_comment.php';
                 </div>
 
                 <div class="comment-search">
-                    <form action="search_comment.php" method="POST">
+                    <form action="../comment/search_comment.php" method="POST">
                         <input type="hidden" name="shop_id" value="<?php echo $row['shop_ID']; ?>">
                         <input type="text" placeholder="請輸入查詢評論關鍵字" name="comment-keyword" class="comment-search-bar">
                         <select class="comment-rating-choice" name="comment-rating-choice">
@@ -398,8 +411,8 @@ require_once 'process_comment.php';
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="swiper.js"></script>
-    <script src="all.js"></script>
+    <script src="../js/swiper.js"></script>
+    <script src="../js/all.js"></script>
 </body>
 
 </html>
